@@ -1,3 +1,5 @@
 rootProject.name = '7isEnough'
 include 'QRcode'
 
+include 'com.google.zxing'
+
