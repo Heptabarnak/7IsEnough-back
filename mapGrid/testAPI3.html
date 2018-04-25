@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Premiers tests de l'api</title>
+    </head>
+<body onload="initialize()">
+ <div id="map" style="width: 320px; height: 480px;"></div>
+  <div>
+    <input id="address" type="textbox" value="Lyon">
+    <input type="button" value="Encode" onclick="codeAddress()">
+  </div>
+  <div id="info"></div>
+  <script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqd9-gkeJPQa8RGecIqlbSf6mfvne0ckw">
+</script>
+  <script>  
+  let geocoder;
+  let map;
+  
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+    let latlng = new google.maps.LatLng(45.75, 4.85);
+    let mapOptions = {
+      zoom: 8,
+      center: latlng
+    }
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+}
+
+  function codeAddress() {
+  let rectangleLat = [];
+  let rectangleLng = [];
+  
+  for (x in rectangleLng) {
+        for (y in rectangleLng[x]) {
+            if (rectangleLng[x][y].setMap) {
+                rectangleLng[x][y].setMap(null)
+                rectangleLng[x][y] = null;
+            }
+        }
+    }
+	
+  const spaceOffset = 0.005;
+    let address = document.getElementById('address').value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == 'OK') {
+	  let bounds = results[0].geometry.bounds;
+        map.setCenter(results[0].geometry.location);
+        /*var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });*/
+	const marker1 = new google.maps.Marker({
+        position: new google.maps.LatLng(bounds.getNorthEast().lat() + spaceOffset, bounds.getNorthEast().lng() + spaceOffset),
+        map: null,
+        draggable: false,
+        title: 'haut_droite'
+    });
+	
+	const marker2 = new google.maps.Marker({
+        position: new google.maps.LatLng(bounds.getSouthWest().lat() - spaceOffset, bounds.getSouthWest().lng() - spaceOffset),
+        map: null,
+        draggable: false,
+        title: 'bas_gauche'
+    });
+	
+	const marker3 = new google.maps.Marker({
+        position: new google.maps.LatLng(bounds.getNorthEast().lat() + spaceOffset, bounds.getSouthWest().lng() - spaceOffset),
+        map: map,
+        draggable: false,
+        title: 'haut_gauche'
+    });
+	
+	document.getElementById('info').innerHTML += results[0].geometry.bounds.toString() + '</br>';
+
+	const excLat = 0.2;
+	const excLng = 0.2;
+	
+	const m1Lng = marker1.getPosition().lng();
+	const m2Lat = marker2.getPosition().lat();
+	const m3Lat = marker3.getPosition().lat();
+	const m3Lng = marker3.getPosition().lng();
+	const r_earth = 6378;
+	let i = 0;
+	let j = 0;
+	let newLat = m3Lat;
+	let newLng = m3Lng;
+	
+	while(newLat > m2Lat){
+        if (!rectangleLng[i]) rectangleLng[i] = [];
+		j = 0;
+		newLat = m3Lat - (i + 1)*(excLat / r_earth) * (180 / Math.PI);
+		newLng = m3Lng + ((j + 1)*(excLng / r_earth) * (180 / Math.PI) / Math.cos(m3Lat * Math.PI/180));
+		while(newLng  < m1Lng){
+            if (!rectangleLng[i][j]) rectangleLng[i][j] = {};
+
+			newLat = m3Lat - (i + 1)*(excLat / r_earth) * (180 / Math.PI);
+			newLng = m3Lng + ((j + 1)*(excLng / r_earth) * (180 / Math.PI) / Math.cos(m3Lat * Math.PI/180));
+            rectangleLng[i][j] = new google.maps.Rectangle({
+                strokeColor: '#FFFFFF',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#FF0000',
+                fillOpacity: 0.1,
+                map: map,
+                bounds: new google.maps.LatLngBounds(
+                new google.maps.LatLng(m3Lat - (i*(excLat / r_earth) * (180 / Math.PI)), m3Lng + (j*(excLng / r_earth) * (180 / Math.PI) / Math.cos(newLat * Math.PI/180))),
+                new google.maps.LatLng(newLat, newLng))
+            });
+			google.maps.event.addListener(rectangleLng[i][j], 'click', function( event ){
+				alert( "Zone: [" + i + "],[" + j + "]");
+				new google.maps.RectangleOptions({
+					fillColor : '#0000FF'
+				});
+				//rectangleLng[i][j].setOptions({fillColor : '#0000FFé'});
+			});
+			j++;
+        } //for j Lng
+		i++;
+    } //for i Lat
+
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+</script>
+</body>
+</html>
