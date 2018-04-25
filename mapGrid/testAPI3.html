@@ -110,12 +110,12 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqd9-gkeJPQa8RGecIqlbSf6m
                 new google.maps.LatLng(m3Lat - (i*(excLat / r_earth) * (180 / Math.PI)), m3Lng + (j*(excLng / r_earth) * (180 / Math.PI) / Math.cos(newLat * Math.PI/180))),
                 new google.maps.LatLng(newLat, newLng))
             });
+			
 			google.maps.event.addListener(rectangleLng[i][j], 'click', function( event ){
-				alert( "Zone: [" + i + "],[" + j + "]");
-				new google.maps.RectangleOptions({
+				alert( "Zone: "+ this.getBounds());
+				setOptions({
 					fillColor : '#0000FF'
 				});
-				//rectangleLng[i][j].setOptions({fillColor : '#0000FFé'});
 			});
 			j++;
         } //for j Lng
