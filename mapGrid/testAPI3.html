@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="style.css"/>
-    <title>Premiers tests de l'api</title>
+    <title>Tests de l'api</title>
 </head>
 <body onload="initialize()">
 <div id="map" style="width: 520px; height: 480px;"></div>
 
-</div>
 <div>
     <input id="address" type="textbox" value="Lyon">
     <input type="button" value="Encode" onclick="codeAddress()">
+    <input type="button" value="Print JSON" onclick="printJSON()">
 </div>
 <div id="info"></div>
-<div id="cadre">
+<div id="cadre"></div>
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6nZUZlt4bHabhU003YHL1rCpKNGKb974">
 </script>
@@ -88,6 +88,7 @@
 	  
     let geocoder;
     let map;
+    let jsonContent = "";
 
     function initialize() {
         geocoder = new google.maps.Geocoder();
@@ -99,6 +100,11 @@
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     }
+
+    function printJSON() {
+		document.getElementById('cadre').innerHTML +=jsonContent;
+    }
+
 
     function codeAddress() {
         const rectangleLat = [];
@@ -165,6 +171,7 @@
 			let prevLat = newLat;
 			const sectorsId = [];
 
+
             while (newLat > m2Lat) {
                 if (!rectangleLng[i]) rectangleLng[i] = [];
                 j = 0;
@@ -217,6 +224,8 @@
                 } //for j Lng
                 i++;
             } //for i Lat
+
+            jsonContent = '{"sector": {"size": ' + excLat*1000 + ',"nbPerLine": ' + (j).toString() + ',"origin": {"long": ' + m3Lng + ',"lat": ' + m3Lat + '}}}';
         });
     }
 </script>
