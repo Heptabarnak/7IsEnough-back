@@ -29,3 +29,9 @@ html, body {
    height:250px;
    overflow:scroll
 }
+
+.customBox {
+      background: transparent;
+      border: hidden;
+      position: absolute;
+}
