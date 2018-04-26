@@ -6,12 +6,15 @@
     <title>Premiers tests de l'api</title>
 </head>
 <body onload="initialize()">
-<div id="map" style="width: 320px; height: 480px;"></div>
+<div id="map" style="width: 520px; height: 480px;"></div>
+
+</div>
 <div>
     <input id="address" type="textbox" value="Lyon">
     <input type="button" value="Encode" onclick="codeAddress()">
 </div>
 <div id="info"></div>
+<div id="cadre">
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6nZUZlt4bHabhU003YHL1rCpKNGKb974">
 </script>
@@ -85,7 +88,8 @@
             const m3Lat = marker3.getPosition().lat();
             const m3Lng = marker3.getPosition().lng();
             const r_earth = 6378;
-
+			
+			let pointClick = new Array();
             let i = 0;
             let j = 0;
             let newLat = m3Lat;
@@ -117,7 +121,9 @@
                         this.setOptions({
                             fillColor: '#0000FF'
                         });
-                    });
+						pointClick.push(this);
+						document.getElementById('cadre').innerHTML +="Rectangle : " + pointClick[pointClick.indexOf(this)].getBounds() + '</br>';
+					});
                     j++;
                 } //for j Lng
                 i++;

@@ -22,3 +22,10 @@ html, body {
   line-height: 30px;
   padding-left: 10px;
 }
+
+#cadre {
+   border:1px solid black;
+   width:800px;
+   height:250px;
+   overflow:scroll
+}
