@@ -92,7 +92,6 @@
 			let pointClick = new Array();
             let i = 0;
             let j = 0;
-            let comptId = 0;
             let newLat = m3Lat;
             let newLng = m3Lng;
 
@@ -117,35 +116,15 @@
                             new google.maps.LatLng(m3Lat - (i * (excLat / r_earth) * (180 / Math.PI)), m3Lng + (j * (excLng / r_earth) * (180 / Math.PI) / Math.cos(newLat * Math.PI / 180))),
                             new google.maps.LatLng(newLat, newLng))
                     });
-                    rectangleLng[i][j].id = comptId;
-                    rectangleLng[i][j].selected = false;
-
 
                     google.maps.event.addListener(rectangleLng[i][j], 'click', function () {
-<<<<<<< HEAD
                         this.setOptions({
                             fillColor: '#0000FF'
                         });
 						pointClick.push(this);
 						document.getElementById('cadre').innerHTML +="Rectangle : " + pointClick[pointClick.indexOf(this)].getBounds() + '</br>';
 					});
-=======
-                        if (!this.selected){
-							this.setOptions({
-								fillColor: '#00FF00'
-							});
-							document.getElementById('info').innerHTML += "id = " + this.id + '</br>';
-                        }
-						else {
-							this.setOptions({
-								fillColor: '#FF0000'
-							});
-						}
-						this.selected = !this.selected;
-                    });
->>>>>>> 561492c96aae01d4838e771a766e9d508e25936d
                     j++;
-                    comptId++;
                 } //for j Lng
                 i++;
             } //for i Lat
