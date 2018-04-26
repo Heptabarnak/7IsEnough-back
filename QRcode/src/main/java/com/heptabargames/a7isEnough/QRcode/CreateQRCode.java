@@ -13,10 +13,10 @@ import static com.skrymer.qrbuilder.decorator.ColoredQRCode.colorizeQRCode;
 
 public class CreateQRCode {
 
-        public static final float TRANSPARENCY = 0.25f;
-        public static final float OVERLAY_RATIO = 1f;
-        public static final int WIDTH = 250;
-        public static final int HEIGHT = 250;
+        public static final float TRANSPARENCY = 1f;
+        public static final float OVERLAY_RATIO = 0.25f;
+        public static final int WIDTH = 260;
+        public static final int HEIGHT = 260;
 
         public static void main(String[] args) throws Exception {
             QRCode.ZXingBuilder.build(builder ->
@@ -26,7 +26,9 @@ public class CreateQRCode {
                             .and()
                             .withDecorator(colorizeQRCode(Color.blue.darker()))
                             .and()
-                            .withDecorator(addImageOverlay(readImage("7isEnough/QRcode/src/main/resources/skull.png"), TRANSPARENCY, OVERLAY_RATIO))
+                            .withDecorator(addImageOverlay(readImage("QRcode/src/main/resources/Logo_reduit.png"), TRANSPARENCY, OVERLAY_RATIO))
+                            .and()
+                            .verify(true)
 
             ).toFile("./qrCode.png", "PNG");
         }
