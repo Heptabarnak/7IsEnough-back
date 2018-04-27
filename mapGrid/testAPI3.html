@@ -13,12 +13,42 @@
     <input type="button" value="Encode" onclick="codeAddress()">
     <input type="button" value="Print JSON" onclick="printJSON()">
 </div>
+<h3>Ajout d'une balise</h3>
+<form>
+	<p>
+		<label for="difficulty">Difficulté (1 à 5)</label>
+		<input type="range" name="difficulty" id="difficulty" min="1" max="5" required>
+	</p>
+	<p>
+		<label for="themeBeacon">Theme</label>
+		<select name="themeBeacon" id="themeBeacon">
+			<option value="SP" selected>Sport</option>
+			<option value="CUL">Culture</option>
+			<option value="BE">Bord de l'eau</option>
+			<option value="XX">Autre</option>
+		</select>
+	</p>
+	<p>
+		<label for="nameBeacon">Name</label>
+		<input type="text" name="nameBeacon" id="nameBeacon" required>
+	</p>
+	<p>
+		<label for="descriptionBeacon">Description</label>
+		<input type="text" name="descriptionBeacon" id="descriptionBeacon" required>
+	</p>
+	<p>
+		<label for="DescriptionMonument">Description du monument associé</label>
+		<input type="text" name="DescriptionMonument" id="DescriptionMonument" required>
+	</p>
+	<input type="button" value="Créer la balise" onclick="createBeacon()">	
+</form>
 <div id="info"></div>
 <div id="cadre"></div>
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6nZUZlt4bHabhU003YHL1rCpKNGKb974">
 </script>
 <script async defer>
+//		<input type="text" name="themeBeacon" id="themeBeacon" required>
 
 	function TxtOverlay(pos, txt, cls, map) {
 
