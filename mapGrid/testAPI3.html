@@ -195,23 +195,24 @@
                             new google.maps.LatLng(newLat, newLng))
                     });
 					rectangleLng[i][j].id = comptId;
-                    rectangleLng[i][j].selected = false;
+                    rectangleLng[i][j].selected = 0;
 
                     google.maps.event.addListener(rectangleLng[i][j], 'click', function () {
-                        if (!this.selected){
+                        if (this.selected === 0){
 							this.setOptions({
 								fillColor: '#00FF00'
 							});
 							pointClick.push(this);
 							document.getElementById('cadre').innerHTML +="Rectangle : " + pointClick[pointClick.indexOf(this)].getBounds() + '</br>';
 							document.getElementById('info').innerHTML += "id = " + this.id + '</br>';
+							this.selected = 1;
                         }
-						else {
+						else if (this.selected === 1){
 							this.setOptions({
 								fillColor: '#FF0000'
 							});
+							pointClick.pop();
 						}
-						this.selected = !this.selected;
 					
 					});
 					
@@ -225,6 +226,7 @@
                 i++;
             } //for i Lat
 
+            //TODO : Utiliser une méthode de remplissage par objet JSON (plutôt que par texte)
             jsonContent = '{"sector": {"size": ' + excLat*1000 + ',"nbPerLine": ' + (j).toString() + ',"origin": {"long": ' + m3Lng + ',"lat": ' + m3Lat + '}}}';
         });
     }
