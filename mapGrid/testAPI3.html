@@ -9,7 +9,7 @@
 <div id="map" style="width: 520px; height: 480px;"></div>
 
 <div>
-    <input id="address" type="textbox" value="Tabuant">
+    <input id="address" type="text" value="Tabuant" title="address">
     <input type="button" value="Encode" onclick="codeAddress()">
     <input type="button" value="Print JSON" onclick="printJSON()">
 </div>
@@ -27,7 +27,6 @@
 	</p>
 		<input type="button" value="Créer zone" onclick="createZone()">
 </form>
-</br>
 <h3>Ajout d'une balise</h3>
 <form>
 	<p>
@@ -72,7 +71,7 @@
       this.pos = pos;
       this.txt_ = txt;
       this.cls_ = cls;
-      this.map_ = map;
+      //this.map_ = map;
 
       // We define a property to hold the image's
       // div. We'll actually create this div
@@ -95,40 +94,40 @@
       // the overlay to the map via the DOM.
 
       // Create the DIV and set some basic attributes.
-      var div = document.createElement('DIV');
+      let div = document.createElement('DIV');
       div.className = this.cls_;
 
       div.innerHTML = this.txt_;
 
       // Set the overlay's div_ property to this DIV
       this.div_ = div;
-      var overlayProjection = this.getProjection();
-      var position = overlayProjection.fromLatLngToDivPixel(this.pos);
+      let overlayProjection = this.getProjection();
+      let position = overlayProjection.fromLatLngToDivPixel(this.pos);
       div.style.left = position.x + 'px';
       div.style.top = position.y + 'px';
       // We add an overlay to a map via one of the map's panes.
 
-      var panes = this.getPanes();
+      let panes = this.getPanes();
       panes.floatPane.appendChild(div);
-    }
+    };
     TxtOverlay.prototype.draw = function() {
 
 
-        var overlayProjection = this.getProjection();
+        let overlayProjection = this.getProjection();
 
         // Retrieve the southwest and northeast coordinates of this overlay
         // in latlngs and convert them to pixels coordinates.
         // We'll use these coordinates to resize the DIV.
-        var position = overlayProjection.fromLatLngToDivPixel(this.pos);
+        let position = overlayProjection.fromLatLngToDivPixel(this.pos);
 
 
-        var div = this.div_;
+        let div = this.div_;
         div.style.left = position.x + 'px';
         div.style.top = position.y + 'px';
 
 
 
-      }
+      };
 
 	  
 	  
@@ -136,7 +135,7 @@
     let map;
     let jsonContent = "";
 	let jsonZone = "";
-	let pointClick = new Array();
+	let pointClick = [];
 
     function initialize() {
         geocoder = new google.maps.Geocoder();
@@ -158,8 +157,8 @@
 		jsonZone += '{"name": "' + document.getElementById('nameZone').value + '","description": "' + document.getElementById('descriptionZone').value + '",';
 		jsonZone += '"sectors": [';
 
-		for(var i= 0; i < pointClick.length ; i++){
-			if(i == pointClick.length-1)
+		for(let i= 0; i < pointClick.length ; i++){
+			if(i === pointClick.length-1)
 			{jsonZone += pointClick[i].id;}
 			else{jsonZone += pointClick[i].id + ',';}
 		}
@@ -168,8 +167,12 @@
 		jsonZone += ']';
 	}
 
+	function createBeacon(){
+
+
+	}
+
     function codeAddress() {
-        const rectangleLat = [];
         const rectangleLng = [];
 
         for (const x of rectangleLng) {
