@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 import static com.skrymer.qrbuilder.decorator.ImageOverlay.*;
 import static com.skrymer.qrbuilder.decorator.ColoredQRCode.colorizeQRCode;
@@ -26,7 +27,7 @@ public class CreateQRCode {
         public static String GenerateToken() throws NoSuchAlgorithmException, UnsupportedEncodingException {
             byte[] bytes = new byte[20];
             SecureRandom.getInstanceStrong().nextBytes(bytes);
-            String token = new String(bytes, "UTF-8");
+            String token = Base64.getEncoder().encodeToString(bytes);
             String hash;
 
             Argon2 argon2 = Argon2Factory.create();
