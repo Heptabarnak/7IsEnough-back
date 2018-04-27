@@ -130,7 +130,9 @@
 		jsonZone += '"sectors": [';
 		
 		for(var i= 0; i < pointClick.length ; i++){
-			jsonZone += pointClick[i].id + ',';
+			if(i == pointClick.length-1)
+			{jsonZone += pointClick[i].id;}
+			else{jsonZone += pointClick[i].id + ',';}
 		}
 		
 		pointClick.length = 0;
