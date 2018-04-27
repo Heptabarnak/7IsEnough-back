@@ -26,7 +26,7 @@ public class CreateQRCode {
                             .and()
                             .withDecorator(colorizeQRCode(Color.blue.darker()))
                             .and()
-                            .withDecorator(addImageOverlay(readImage("QRcode/src/main/resources/Logo_reduit.png"), TRANSPARENCY, OVERLAY_RATIO))
+                            .withDecorator(addImageOverlay(readImage("QRcode/src/main/resources/Logo_seul_blanc.png"), TRANSPARENCY, OVERLAY_RATIO))
                             .and()
                             .verify(true)
 
