@@ -9,10 +9,25 @@
 <div id="map" style="width: 520px; height: 480px;"></div>
 
 <div>
-    <input id="address" type="textbox" value="Lyon">
+    <input id="address" type="textbox" value="Tabuant">
     <input type="button" value="Encode" onclick="codeAddress()">
     <input type="button" value="Print JSON" onclick="printJSON()">
 </div>
+<h3>Création de zone</h3>
+<form>
+	<p>
+		<label for="nameZone">Nom de la zone</label>
+		<input type="text" name="nameZone" id="nameZone">
+	</p>
+		<label for="descriptionZone">Description de la zone</label>
+		<input type="text" name="descriptionZone" id="descriptionZone">
+	<p>
+		<label for="zoneSelect">Les zones sélectionnées</label>
+		<input type="text" name="zoneSelect" id="zoneSelect">
+	</p>
+		<input type="button" value="Créer zone" onclick="createZone()">
+</form>
+</br>
 <h3>Ajout d'une balise</h3>
 <form>
 	<p>
@@ -40,10 +55,11 @@
 		<label for="DescriptionMonument">Description du monument associé</label>
 		<input type="text" name="DescriptionMonument" id="DescriptionMonument" required>
 	</p>
-	<input type="button" value="Créer la balise" onclick="createBeacon()">	
+	<input type="button" value="Créer la balise" onclick="createBeacon()">
 </form>
 <div id="info"></div>
 <div id="cadre"></div>
+
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6nZUZlt4bHabhU003YHL1rCpKNGKb974">
 </script>
@@ -119,6 +135,8 @@
     let geocoder;
     let map;
     let jsonContent = "";
+	let jsonZone = "";
+	let pointClick = new Array();
 
     function initialize() {
         geocoder = new google.maps.Geocoder();
@@ -132,9 +150,23 @@
     }
 
     function printJSON() {
-		document.getElementById('cadre').innerHTML +=jsonContent;
+		document.getElementById('cadre').innerHTML +=jsonContent + jsonZone;
+
     }
 
+	function createZone() {
+		jsonZone += '{"name": "' + document.getElementById('nameZone').value + '","description": "' + document.getElementById('descriptionZone').value + '",';
+		jsonZone += '"sectors": [';
+
+		for(var i= 0; i < pointClick.length ; i++){
+			if(i == pointClick.length-1)
+			{jsonZone += pointClick[i].id;}
+			else{jsonZone += pointClick[i].id + ',';}
+		}
+
+		pointClick.length = 0;
+		jsonZone += ']';
+	}
 
     function codeAddress() {
         const rectangleLat = [];
@@ -191,8 +223,7 @@
             const m3Lat = marker3.getPosition().lat();
             const m3Lng = marker3.getPosition().lng();
             const r_earth = 6378;
-			
-			let pointClick = new Array();
+
             let i = 0;
             let j = 0;
 			let comptId = 0;
@@ -233,7 +264,7 @@
 								fillColor: '#00FF00'
 							});
 							pointClick.push(this);
-							document.getElementById('cadre').innerHTML +="Rectangle : " + pointClick[pointClick.indexOf(this)].getBounds() + '</br>';
+							document.getElementById('cadre').innerHTML +="Rectangle : " + pointClick[pointClick.indexOf(this)].id + '</br>';
 							document.getElementById('info').innerHTML += "id = " + this.id + '</br>';
 							this.selected = 1;
                         }
@@ -257,7 +288,7 @@
             } //for i Lat
 
             //TODO : Utiliser une méthode de remplissage par objet JSON (plutôt que par texte)
-            jsonContent = '{"sector": {"size": ' + excLat*1000 + ',"nbPerLine": ' + (j).toString() + ',"origin": {"long": ' + m3Lng + ',"lat": ' + m3Lat + '}}}';
+            jsonContent = '{"sector": {"size": ' + excLat*1000 + ',"nbPerLine": ' + (j).toString() + ',"origin": {"long": ' + m3Lng + ',"lat": ' + m3Lat + '}}, "zones": [';
         });
     }
 </script>
