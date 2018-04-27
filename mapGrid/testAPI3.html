@@ -19,11 +19,9 @@
 		<label for="nameZone">Nom de la zone</label>
 		<input type="text" name="nameZone" id="nameZone">
 	</p>
+	<p>
 		<label for="descriptionZone">Description de la zone</label>
 		<input type="text" name="descriptionZone" id="descriptionZone">
-	<p>
-		<label for="zoneSelect">Les zones sélectionnées</label>
-		<input type="text" name="zoneSelect" id="zoneSelect">
 	</p>
 		<input type="button" value="Créer zone" onclick="createZone()">
 </form>
@@ -166,6 +164,11 @@
 
 		jsonObject.zones[zoneNumber].beacons = [];
 		pointClick.length = 0;
+
+		document.getElementById('nameZone').value = "";
+		document.getElementById('descriptionZone').value = "";
+
+
 		zoneNumber++;
 	}
 
@@ -278,8 +281,9 @@
 								fillColor: '#FF0000'
 							});
 							pointClick.pop();
+							this.selected = 0;
 						}
-					
+
 					});
 					
 					sectorsId[comptId] = new TxtOverlay(new google.maps.LatLng(m3Lat - (i)*(excLat / r_earth) * (180 / Math.PI), m3Lng + (j*(excLng / r_earth) * (180 / Math.PI) / Math.cos(prevLat * Math.PI/180))), 
