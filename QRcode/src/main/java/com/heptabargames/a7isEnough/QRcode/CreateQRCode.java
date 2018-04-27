@@ -26,42 +26,42 @@ public class CreateQRCode {
         public static String GenerateToken() throws NoSuchAlgorithmException, UnsupportedEncodingException {
             byte[] bytes = new byte[20];
             SecureRandom.getInstanceStrong().nextBytes(bytes);
-            String password = new String(bytes, "UTF-8");
+            String token = new String(bytes, "UTF-8");
             String hash;
 
             Argon2 argon2 = Argon2Factory.create();
             try {
                 // Hash password
-                hash = argon2.hash(2, 65536, 1, password);
+                hash = argon2.hash(2, 65536, 1, token);
 
-                // Verify password
-                if (argon2.verify(hash, password)) {
-                    // Hash matches password
-                } else {
-                    // Hash doesn't match password
-                }
             } finally {
-                // Wipe confidential data
-                argon2.wipeArray(password.toCharArray());
+                GenerateQRcode(token);
+                argon2.wipeArray(token.toCharArray());
             }
             return hash;
 
         }
-
-
-        public static void main(String[] args) throws Exception {
+        public static void GenerateQRcode (String token){
             QRCode.ZXingBuilder.build(builder ->
                     builder.withSize(WIDTH, HEIGHT)
                             .and()
-                            .withData("Il est née le divin enfant")
+                            .withData(token)
                             .and()
-                            .withDecorator(colorizeQRCode(Color.black.darker()))
+                            .withDecorator(colorizeQRCode(Color.magenta.darker()))
                             .and()
-                            .withDecorator(addImageOverlay(readImage("QRcode/src/main/resources/Logo_seul_blanc.png"), TRANSPARENCY, OVERLAY_RATIO))
+                            .withDecorator(addImageOverlay(readImage("QRcode/src/main/resources/Logo_seul(1).png"), TRANSPARENCY, OVERLAY_RATIO))
                             .and()
                             .verify(true)
 
             ).toFile("./qrCode.png", "PNG");
+        }
+
+
+        public static void main(String[] args) throws Exception {
+
+            String hash = GenerateToken();
+            System.out.println(hash);
+
         }
 
         public static BufferedImage readImage(String path) {
