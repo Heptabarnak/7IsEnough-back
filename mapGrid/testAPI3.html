@@ -165,6 +165,10 @@
 
 		pointClick.length = 0;
 		jsonZone += ']';
+
+		document.getElementById('nameZone').value = "";
+		document.getElementById('descriptionZone').value = "";
+		document.getElementById('zoneSelect').value = "";
 	}
 
 	function createBeacon(){
@@ -269,6 +273,7 @@
 							pointClick.push(this);
 							document.getElementById('cadre').innerHTML +="Rectangle : " + pointClick[pointClick.indexOf(this)].id + '</br>';
 							document.getElementById('info').innerHTML += "id = " + this.id + '</br>';
+							document.getElementById('zoneSelect').value += pointClick[pointClick.indexOf(this)].id + ' ';
 							this.selected = 1;
                         }
 						else if (this.selected === 1){
@@ -276,8 +281,9 @@
 								fillColor: '#FF0000'
 							});
 							pointClick.pop();
+							this.selected = 0;
 						}
-					
+
 					});
 					
 					sectorsId[comptId] = new TxtOverlay(new google.maps.LatLng(m3Lat - (i)*(excLat / r_earth) * (180 / Math.PI), m3Lng + (j*(excLng / r_earth) * (180 / Math.PI) / Math.cos(prevLat * Math.PI/180))), 
