@@ -133,9 +133,9 @@
 	  
     let geocoder;
     let map;
-    let jsonContent = "";
-	let jsonZone = "";
+    let jsonObject = {};
 	let pointClick = [];
+	let zoneNumber = 0;
 
     function initialize() {
         geocoder = new google.maps.Geocoder();
@@ -149,22 +149,24 @@
     }
 
     function printJSON() {
-		document.getElementById('cadre').innerHTML +=jsonContent + jsonZone;
+		document.getElementById('cadre').innerHTML += JSON.stringify(jsonObject);
 
     }
 
 	function createZone() {
-		jsonZone += '{"name": "' + document.getElementById('nameZone').value + '","description": "' + document.getElementById('descriptionZone').value + '",';
-		jsonZone += '"sectors": [';
+
+        jsonObject.zones[zoneNumber] = {};
+        jsonObject.zones[zoneNumber].name = document.getElementById('nameZone').value;
+        jsonObject.zones[zoneNumber].description = document.getElementById('descriptionZone').value;
+        jsonObject.zones[zoneNumber].sectors = [];
 
 		for(let i= 0; i < pointClick.length ; i++){
-			if(i === pointClick.length-1)
-			{jsonZone += pointClick[i].id;}
-			else{jsonZone += pointClick[i].id + ',';}
+			jsonObject.zones[zoneNumber].sectors.push(pointClick[i].id);
 		}
 
+		jsonObject.zones[zoneNumber].beacons = [];
 		pointClick.length = 0;
-		jsonZone += ']';
+		zoneNumber++;
 	}
 
 	function createBeacon(){
@@ -290,8 +292,13 @@
                 i++;
             } //for i Lat
 
-            //TODO : Utiliser une méthode de remplissage par objet JSON (plutôt que par texte)
-            jsonContent = '{"sector": {"size": ' + excLat*1000 + ',"nbPerLine": ' + (j).toString() + ',"origin": {"long": ' + m3Lng + ',"lat": ' + m3Lat + '}}, "zones": [';
+            jsonObject.sector = {};
+            jsonObject.sector.size = excLat*1000;
+            jsonObject.sector.nbPerLine = j;
+            jsonObject.sector.origin = {};
+            jsonObject.sector.origin.long = m3Lng;
+            jsonObject.sector.origin.lat = m3Lat;
+            jsonObject.zones = [];
         });
     }
 </script>
