@@ -13,6 +13,11 @@
     <input type="button" value="Encode" onclick="codeAddress()">
     <input type="button" value="Print JSON" onclick="printJSON()">
 </div>
+<br/>
+<div>
+    <input id="jsonToParse" type="text" title="json">
+    <input type="button" value="Charger JSON" onclick="loadJSON()">
+</div>
 <h3>Création de zone</h3>
 <form>
 	<p>
@@ -150,11 +155,33 @@
     }
 
     function printJSON() {
+        document.getElementById('info').innerHTML += jsonObject.zones[0].name;
 		document.getElementById('cadre').innerHTML += JSON.stringify(jsonObject);
 
     }
 
+    // TODO : Gérer l'intégration d'un fichier plutôt qu'un copier-coller de texte
+    function loadJSON() {
+        jsonObject = JSON.parse(document.getElementById('jsonToParse').value);
+
+        for(let i = 0; i < jsonObject.zones.length; i++)
+        {
+            for(let j = 0; j < jsonObject.zones[i].sectors.length; j++)
+            {
+                // TODO : automatiser ça dans une fonction pour éviter la redondance avec createZone()
+                let sectorX = Math.floor(jsonObject.zones[i].sectors[j]/jsonObject.sector.nbPerLine);
+                let sectorY = jsonObject.zones[i].sectors[j] % jsonObject.sector.nbPerLine;
+
+                sectors[sectorX][sectorY].setOptions({
+                    fillColor: '#0000FF'
+                });
+                sectors[sectorX][sectorY].selected = 2;
+            }
+        }
+    }
+
 	function createZone() {
+        let testNameZone = document.getElementById('nameZone').value;
         jsonObject.zones[zoneNumber] = {};
         jsonObject.zones[zoneNumber].name = document.getElementById('nameZone').value;
         jsonObject.zones[zoneNumber].description = document.getElementById('descriptionZone').value;
