@@ -49,8 +49,8 @@
 		<input type="text" name="descriptionBeacon" id="descriptionBeacon" required>
 	</p>
 	<p>
-		<label for="DescriptionMonument">Description du monument associé</label>
-		<input type="text" name="DescriptionMonument" id="DescriptionMonument" required>
+		<label for="descriptionMonument">Description du monument associé</label>
+		<input type="text" name="descriptionMonument" id="descriptionMonument" required>
 	</p>
 	<input type="button" value="Créer la balise" onclick="createBeacon()">
 </form>
@@ -134,7 +134,9 @@
 	const sectors = [];
     let jsonObject = {};
 	let pointClick = [];
+	let lastSectorClicked;
 	let zoneNumber = 0;
+	let beaconNumber = 0;
 
     function initialize() {
         geocoder = new google.maps.Geocoder();
@@ -153,7 +155,6 @@
     }
 
 	function createZone() {
-
         jsonObject.zones[zoneNumber] = {};
         jsonObject.zones[zoneNumber].name = document.getElementById('nameZone').value;
         jsonObject.zones[zoneNumber].description = document.getElementById('descriptionZone').value;
@@ -185,7 +186,31 @@
 	}
 
 	function createBeacon(){
+        let zoneFounded = false;
+        let i = -1;
+        while (!zoneFounded && i < jsonObject.zones.length)
+        {
+            i++;
+            zoneFounded = jsonObject.zones[i].sectors.includes(lastSectorClicked.id);
 
+        }
+
+        if (zoneFounded)
+        {
+            jsonObject.zones[i].beacons.push({});
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].id = beaconNumber;
+            // TODO : ajouter le hash du token correspondant
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].hash = "hash de token, où es-tu ??";
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].difficulty = document.getElementById('difficulty').value;
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].theme = document.getElementById('themeBeacon').value;
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].name = document.getElementById('nameBeacon').value;
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].description = document.getElementById('descriptionBeacon').value;
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].monumentDesc = document.getElementById('descriptionMonument').value;
+        }
+        else    // Le dernier secteur cliqué n'appartient à aucune zone déjà existante
+        {
+            // TODO : retourner un message d'erreur sur l'interface (où précisément ?)
+        }
 
 	}
 
@@ -278,6 +303,7 @@
                     sectors[i][j].selected = 0;
 
                     google.maps.event.addListener(sectors[i][j], 'click', function () {
+                        lastSectorClicked = this;
                         if (this.selected === 0){
 							this.setOptions({
 								fillColor: '#00FF00'

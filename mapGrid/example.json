@@ -1,0 +1,46 @@
+{
+  "sector": {
+    "size": 200,
+    "nbPerLine": 7,
+    "origin": {
+      "long": 4.341139300000009,
+      "lat": 44.96931640000001
+    }
+  },
+  "zones": [
+    {
+      "name": "Zone 1",
+      "description": "Une super route",
+      "sectors": [
+        31,
+        38,
+        37,
+        44
+      ],
+      "beacons": [
+        {
+          "id": 0,
+          "hash": "hash de token, où es-tu ??",
+          "difficulty": "4",
+          "theme": "CUL",
+          "name": "Poteau",
+          "description": "Pensez vertical !",
+          "monumentDesc": "Ce poteau représente la beauté de la nature qui nous entoure"
+        }
+      ]
+    },
+    {
+      "name": "Zone 2",
+      "description": "Quelle belle colline",
+      "sectors": [
+        9,
+        10,
+        11,
+        18,
+        20,
+        19
+      ],
+      "beacons": []
+    }
+  ]
+}
