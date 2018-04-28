@@ -169,8 +169,19 @@
 		document.getElementById('nameZone').value = "";
 		document.getElementById('descriptionZone').value = "";
 
+        for(let i = 0; i < jsonObject.zones[zoneNumber].sectors.length; i++)
+        {
+            let sectorX = Math.floor(jsonObject.zones[zoneNumber].sectors[i]/jsonObject.sector.nbPerLine);
+            let sectorY = jsonObject.zones[zoneNumber].sectors[i] % jsonObject.sector.nbPerLine;
 
-		zoneNumber++;
+            sectors[sectorX][sectorY].setOptions({
+                fillColor: '#0000FF'
+            });
+            sectors[sectorX][sectorY].selected = 2;
+        }
+
+        zoneNumber++;
+
 	}
 
 	function createBeacon(){
