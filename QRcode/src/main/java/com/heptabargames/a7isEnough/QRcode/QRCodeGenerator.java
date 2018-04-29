@@ -35,7 +35,7 @@ public class QRCodeGenerator {
         try {
             FileOutputStream qrCodeFile = new FileOutputStream("test.png");
 
-            generateQRcode("Coucou, tu veux voir ma bite ?", qrCodeFile);
+            generateQRcode("Test pour la librairie 1", qrCodeFile);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
