@@ -11,17 +11,94 @@
     <title>Tests de l'api</title>
 </head>
 <body onload="initialize()">
+<<<<<<< HEAD
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="row">
+					<div class="col-sm-6">
+						<div id="map" style="width: 700px; height: 480px;"></div>
+
+						<div>
+							<input id="address" type="text" value="Tabuant" title="address">
+							<input type="button" value="Encode" onclick="codeAddress()">
+							<input type="button" value="Print JSON" onclick="printJSON()">
+						</div>
+						<div>
+							<input id="jsonToParse" type="text" title="json">
+							<input type="button" value="Charger JSON" onclick="loadJSON()">
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="row">
+							<div class="col-sm-6">
+								<h3>Création de zone</h3>
+								<form>
+									<p>
+										<label for="nameZone">Nom de la zone</label>
+										<input type="text" name="nameZone" id="nameZone">
+									</p>
+									<p>
+										<label for="descriptionZone">Description de la zone</label>
+										<input type="text" name="descriptionZone" id="descriptionZone">
+									</p>
+									<input type="button" value="Créer zone" onclick="createZone()" class="btn btn-primary">
+								</form>
+							</div>
+							<div class="col-sm-6">
+								<h3>Ajout d'une balise</h3>
+								<form>
+									<p>
+										<label for="difficulty">Difficulté (1 à 5)</label>
+										<input type="range" name="difficulty" id="difficulty" min="1" max="5" required>
+									</p>
+									<p>
+										<label for="themeBeacon">Theme</label>
+										<select name="themeBeacon" id="themeBeacon">
+											<option value="SP" selected>Sport</option>
+											<option value="CUL">Culture</option>
+											<option value="BE">Bord de l'eau</option>
+											<option value="XX">Autre</option>
+										</select>
+									</p>
+									<p>
+										<label for="nameBeacon">Nom</label>
+										<input type="text" name="nameBeacon" id="nameBeacon" required>
+									</p>
+									<p>
+										<label for="descriptionBeacon">Description</label>
+										<input type="text" name="descriptionBeacon" id="descriptionBeacon" required>
+									</p>
+									<p>
+										<label for="descriptionMonument">Description du monument associé</label>
+										<input type="text" name="descriptionMonument" id="descriptionMonument" required>
+									</p>
+									<p>
+										<label for="hashToken">Hash du token</label>
+										<input type="text" name="hashToken" id="hashToken" required>
+									</p>
+									<input type="button" value="Créer la balise" onclick="createBeacon()">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+=======
 <div id="map" style="width: 520px; height: 480px;"></div>
 
 <div>
     <input id="address" type="text" value="Tabuant" title="address">
     <input type="button" value="Encode" onclick="codeAddress()">
     <input type="button" value="Print JSON" onclick="printJSON()">
+    <input type="button" value="Save JSON" onclick="download()">
 </div>
 <br/>
 <div>
-    <input id="jsonToParse" type="text" title="json">
-    <input type="button" value="Charger JSON" onclick="loadJSON()">
+    <h3>Importer un fichier JSON</h3>
+    <input id="file" type="file" />
 </div>
 <h3>Création de zone</h3>
 <form>
@@ -68,6 +145,7 @@
 	</p>
 	<input type="button" value="Créer la balise" onclick="createBeacon()">
 </form>
+>>>>>>> a357f1eece428a3f34048952ec6c1585fcb843ed
 <div id="info"></div>
 <div id="cadre"></div>
 
@@ -169,6 +247,26 @@
 
     }
 
+    function download() {
+        let filename = "map.json";
+        let type = "json";
+        let file = new Blob([JSON.stringify(jsonObject)], {type: type});
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+            let a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+
     function lockSectorsInZone(i, j) {
         let sectorX = Math.floor(jsonObject.zones[i].sectors[j]/jsonObject.sector.nbPerLine);
         let sectorY = jsonObject.zones[i].sectors[j] % jsonObject.sector.nbPerLine;
@@ -179,18 +277,26 @@
         sectors[sectorX][sectorY].selected = 2;
     }
 
-    // TODO : Gérer l'intégration d'un fichier plutôt qu'un copier-coller de texte
-    function loadJSON() {
-        jsonObject = JSON.parse(document.getElementById('jsonToParse').value);
+    document.querySelector('#file').addEventListener('change', function() {
 
-        for(let i = 0; i < jsonObject.zones.length; i++)
-        {
-            for(let j = 0; j < jsonObject.zones[i].sectors.length; j++)
+        let reader = new FileReader();
+
+        reader.addEventListener('load', function() {
+            let jsonToParse = reader.result;
+            jsonObject = JSON.parse(jsonToParse);
+
+            for(let i = 0; i < jsonObject.zones.length; i++)
             {
-                lockSectorsInZone(i,j);
+                for(let j = 0; j < jsonObject.zones[i].sectors.length; j++)
+                {
+                    lockSectorsInZone(i,j);
+                }
             }
-        }
-    }
+
+        });
+
+        reader.readAsText(document.querySelector('#file').files[0], 'UTF-8');
+    });
 
 	function createZone() {
         let testNameZone = document.getElementById('nameZone').value;
