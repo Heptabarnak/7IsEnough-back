@@ -3,6 +3,11 @@
 <head>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="style.css"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <title>Tests de l'api</title>
 </head>
 <body onload="initialize()">
@@ -28,7 +33,7 @@
 		<label for="descriptionZone">Description de la zone</label>
 		<input type="text" name="descriptionZone" id="descriptionZone">
 	</p>
-		<input type="button" value="Créer zone" onclick="createZone()">
+		<input type="button" value="Créer zone" onclick="createZone()" class="btn btn-primary">
 </form>
 <h3>Ajout d'une balise</h3>
 <form>
@@ -46,7 +51,7 @@
 		</select>
 	</p>
 	<p>
-		<label for="nameBeacon">Name</label>
+		<label for="nameBeacon">Nom</label>
 		<input type="text" name="nameBeacon" id="nameBeacon" required>
 	</p>
 	<p>
@@ -56,6 +61,10 @@
 	<p>
 		<label for="descriptionMonument">Description du monument associé</label>
 		<input type="text" name="descriptionMonument" id="descriptionMonument" required>
+	</p>
+	<p>
+		<label for="hashToken">Hash du token</label>
+		<input type="text" name="hashToken" id="hashToken" required>
 	</p>
 	<input type="button" value="Créer la balise" onclick="createBeacon()">
 </form>
@@ -226,8 +235,7 @@
         {
             jsonObject.zones[i].beacons.push({});
             jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].id = beaconNumber;
-            // TODO : ajouter le hash du token correspondant
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].hash = "hash de token, où es-tu ??";
+            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].hash = document.getElementById('hashToken').value;
             jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].difficulty = document.getElementById('difficulty').value;
             jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].theme = document.getElementById('themeBeacon').value;
             jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].name = document.getElementById('nameBeacon').value;
