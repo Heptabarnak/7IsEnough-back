@@ -22,6 +22,7 @@
 <div>
     <input id="jsonToParse" type="text" title="json">
     <input type="button" value="Charger JSON" onclick="loadJSON()">
+    <input id="file" type="file" />
 </div>
 <h3>Création de zone</h3>
 <form>
@@ -179,18 +180,26 @@
         sectors[sectorX][sectorY].selected = 2;
     }
 
-    // TODO : Gérer l'intégration d'un fichier plutôt qu'un copier-coller de texte
-    function loadJSON() {
-        jsonObject = JSON.parse(document.getElementById('jsonToParse').value);
+    document.querySelector('#file').addEventListener('change', function() {
 
-        for(let i = 0; i < jsonObject.zones.length; i++)
-        {
-            for(let j = 0; j < jsonObject.zones[i].sectors.length; j++)
+        let reader = new FileReader();
+
+        reader.addEventListener('load', function() {
+            let jsonToParse = reader.result;
+            jsonObject = JSON.parse(jsonToParse);
+
+            for(let i = 0; i < jsonObject.zones.length; i++)
             {
-                lockSectorsInZone(i,j);
+                for(let j = 0; j < jsonObject.zones[i].sectors.length; j++)
+                {
+                    lockSectorsInZone(i,j);
+                }
             }
-        }
-    }
+
+        });
+
+        reader.readAsText(document.querySelector('#file').files[0], 'UTF-8');
+    });
 
 	function createZone() {
         let testNameZone = document.getElementById('nameZone').value;
