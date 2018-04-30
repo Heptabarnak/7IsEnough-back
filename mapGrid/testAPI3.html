@@ -411,7 +411,11 @@
 							this.setOptions({
 								fillColor: '#FF0000'
 							});
-							pointClick.pop();
+                            let sectorIndex = pointClick.indexOf(this);
+                            if (sectorIndex > -1)
+                            {
+                                pointClick.splice(sectorIndex, 1);
+                            }
 							this.selected = 0;
 						}
 
