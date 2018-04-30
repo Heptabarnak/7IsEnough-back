@@ -169,6 +169,16 @@
 
     }
 
+    function lockSectorsInZone(i, j) {
+        let sectorX = Math.floor(jsonObject.zones[i].sectors[j]/jsonObject.sector.nbPerLine);
+        let sectorY = jsonObject.zones[i].sectors[j] % jsonObject.sector.nbPerLine;
+
+        sectors[sectorX][sectorY].setOptions({
+            fillColor: '#0000FF'
+        });
+        sectors[sectorX][sectorY].selected = 2;
+    }
+
     // TODO : Gérer l'intégration d'un fichier plutôt qu'un copier-coller de texte
     function loadJSON() {
         jsonObject = JSON.parse(document.getElementById('jsonToParse').value);
@@ -177,14 +187,7 @@
         {
             for(let j = 0; j < jsonObject.zones[i].sectors.length; j++)
             {
-                // TODO : automatiser ça dans une fonction pour éviter la redondance avec createZone()
-                let sectorX = Math.floor(jsonObject.zones[i].sectors[j]/jsonObject.sector.nbPerLine);
-                let sectorY = jsonObject.zones[i].sectors[j] % jsonObject.sector.nbPerLine;
-
-                sectors[sectorX][sectorY].setOptions({
-                    fillColor: '#0000FF'
-                });
-                sectors[sectorX][sectorY].selected = 2;
+                lockSectorsInZone(i,j);
             }
         }
     }
@@ -208,13 +211,7 @@
 
         for(let i = 0; i < jsonObject.zones[zoneNumber].sectors.length; i++)
         {
-            let sectorX = Math.floor(jsonObject.zones[zoneNumber].sectors[i]/jsonObject.sector.nbPerLine);
-            let sectorY = jsonObject.zones[zoneNumber].sectors[i] % jsonObject.sector.nbPerLine;
-
-            sectors[sectorX][sectorY].setOptions({
-                fillColor: '#0000FF'
-            });
-            sectors[sectorX][sectorY].selected = 2;
+            lockSectorsInZone(zoneNumber, i);
         }
 
         zoneNumber++;
