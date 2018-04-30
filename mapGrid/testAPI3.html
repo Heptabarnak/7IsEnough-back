@@ -218,23 +218,27 @@
         sectors[sectorX][sectorY].selected = 2;
     }
 
+    // Fonction de lecture d'un fichier
     document.querySelector('#file').addEventListener('change', function() {
 
         let reader = new FileReader();
-
+        beaconNumber = 0;
         reader.addEventListener('load', function() {
             let jsonToParse = reader.result;
             jsonObject = JSON.parse(jsonToParse);
 
-            for(let i = 0; i < jsonObject.zones.length; i++)
-            {
-                for(let j = 0; j < jsonObject.zones[i].sectors.length; j++)
-                {
-                    lockSectorsInZone(i,j);
+            for(let i = 0; i < jsonObject.zones.length; i++) {
+                for (let j = 0; j < jsonObject.zones[i].sectors.length; j++) {
+                    lockSectorsInZone(i, j);
+                }
+                for (let j = 0; j < jsonObject.zones[i].beacons.length; j++) {
+                    if (jsonObject.zones[i].beacons[j].id > beaconNumber) {
+                        beaconNumber = jsonObject.zones[i].beacons[j].id
+                    }
                 }
             }
-
-            zoneNumber = zones.length;
+            zoneNumber = jsonObject.zones.length;
+            beaconNumber++;
 
         });
 
@@ -242,7 +246,6 @@
     });
 
 	function createZone() {
-        let testNameZone = document.getElementById('nameZone').value;
         jsonObject.zones[zoneNumber] = {};
         jsonObject.zones[zoneNumber].name = document.getElementById('nameZone').value;
         jsonObject.zones[zoneNumber].description = document.getElementById('descriptionZone').value;
@@ -290,6 +293,8 @@
                 jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].name = document.getElementById('nameBeacon').value;
                 jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].description = document.getElementById('descriptionBeacon').value;
                 jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].monumentDesc = document.getElementById('descriptionMonument').value;
+                beaconNumber++;
+                alert("Le repère a été créé avec succès");
             }
             else    // Le dernier secteur cliqué n'appartient à aucune zone déjà existante
             {
@@ -426,7 +431,7 @@
             jsonObject.sector.size = excLat*1000;
             jsonObject.sector.nbPerLine = j;
             jsonObject.sector.origin = {};
-            jsonObject.sector.origin.long = m3Lng;
+            jsonObject.sector.origin.lng = m3Lng;
             jsonObject.sector.origin.lat = m3Lat;
             jsonObject.zones = [];
         });

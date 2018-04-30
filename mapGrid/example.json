@@ -3,7 +3,7 @@
     "size": 200,
     "nbPerLine": 7,
     "origin": {
-      "long": 4.341139300000009,
+      "lng": 4.341139300000009,
       "lat": 44.96931640000001
     }
   },
@@ -19,8 +19,8 @@
       ],
       "beacons": [
         {
-          "id": 0,
-          "hash": "hash de token, où es-tu ??",
+          "id": 2,
+          "hash": "valeuraleatoirepourlinstant",
           "difficulty": "4",
           "theme": "CUL",
           "name": "Poteau",
@@ -40,7 +40,17 @@
         20,
         19
       ],
-      "beacons": []
+      "beacons": [
+        {
+          "id": 4,
+          "hash": "toujourspasdexempledetoken",
+          "difficulty": "2",
+          "theme": "SP",
+          "name": "Montée",
+          "description": "Ça va grimper d'ici peu!",
+          "monumentDesc": "Cette montée est le célèbre chemin emprunté par Erylis durant les événements de la grande guerre"
+        }
+      ]
     }
   ]
 }
