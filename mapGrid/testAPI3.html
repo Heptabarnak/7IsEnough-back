@@ -17,11 +17,11 @@
     <input id="address" type="text" value="Tabuant" title="address">
     <input type="button" value="Encode" onclick="codeAddress()">
     <input type="button" value="Print JSON" onclick="printJSON()">
+    <input type="button" value="Save JSON" onclick="download()">
 </div>
 <br/>
 <div>
-    <input id="jsonToParse" type="text" title="json">
-    <input type="button" value="Charger JSON" onclick="loadJSON()">
+    <h3>Importer un fichier JSON</h3>
     <input id="file" type="file" />
 </div>
 <h3>Création de zone</h3>
@@ -168,6 +168,26 @@
         document.getElementById('info').innerHTML += jsonObject.zones[0].name;
 		document.getElementById('cadre').innerHTML += JSON.stringify(jsonObject);
 
+    }
+
+    function download() {
+        let filename = "map.json";
+        let type = "json";
+        let file = new Blob([JSON.stringify(jsonObject)], {type: type});
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+            let a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
     }
 
     function lockSectorsInZone(i, j) {
