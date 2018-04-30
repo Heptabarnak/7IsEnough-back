@@ -221,29 +221,32 @@
 	function createBeacon(){
         let zoneFounded = false;
         let i = -1;
-        while (!zoneFounded && i < jsonObject.zones.length)
+        if (!lastSectorClicked)
         {
-            i++;
-            zoneFounded = jsonObject.zones[i].sectors.includes(lastSectorClicked.id);
-
+            alert("Vous n'avez cliqué sur aucun secteur pour l'instant")
         }
+        else {
+            while (!zoneFounded && i < jsonObject.zones.length - 1) {
+                i++;
+                zoneFounded = jsonObject.zones[i].sectors.includes(lastSectorClicked.id);
 
-        if (zoneFounded)
-        {
-            jsonObject.zones[i].beacons.push({});
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].id = beaconNumber;
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].hash = document.getElementById('hashToken').value;
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].difficulty = document.getElementById('difficulty').value;
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].theme = document.getElementById('themeBeacon').value;
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].name = document.getElementById('nameBeacon').value;
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].description = document.getElementById('descriptionBeacon').value;
-            jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length-1].monumentDesc = document.getElementById('descriptionMonument').value;
-        }
-        else    // Le dernier secteur cliqué n'appartient à aucune zone déjà existante
-        {
-            // TODO : retourner un message d'erreur sur l'interface (où précisément ?)
-        }
+            }
 
+            if (zoneFounded) {
+                jsonObject.zones[i].beacons.push({});
+                jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].id = beaconNumber;
+                jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].hash = document.getElementById('hashToken').value;
+                jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].difficulty = document.getElementById('difficulty').value;
+                jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].theme = document.getElementById('themeBeacon').value;
+                jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].name = document.getElementById('nameBeacon').value;
+                jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].description = document.getElementById('descriptionBeacon').value;
+                jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].monumentDesc = document.getElementById('descriptionMonument').value;
+            }
+            else    // Le dernier secteur cliqué n'appartient à aucune zone déjà existante
+            {
+                alert("Le secteur sélectionné en dernier n'appartient à aucune zone !");
+            }
+        }
 	}
 
     function codeAddress() {
