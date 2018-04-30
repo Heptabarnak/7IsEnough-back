@@ -58,10 +58,17 @@ public class CreateQRCode {
         }
 
 
-        public static void main(String[] args) throws Exception {
+        public static void generateQRcode() {
 
-            String hash = GenerateToken();
-            System.out.println(hash);
+        String hash = null;
+        try {
+            hash = GenerateToken();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(hash);
 
         }
 
