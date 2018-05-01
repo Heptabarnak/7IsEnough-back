@@ -64,7 +64,7 @@ public class CreateQRCode {
         }
 
 
-        public static void generateQRcode() {
+        public static String generateQRcode() {
 
         String hash = null;
         try {
@@ -72,7 +72,7 @@ public class CreateQRCode {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-            System.out.println(hash);
+            return hash;
 
         }
 

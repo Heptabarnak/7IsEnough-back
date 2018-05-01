@@ -56,7 +56,11 @@ public class QRGenerator extends JDialog {
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            CreateQRCode.generateQRcode();
+            String hash =  CreateQRCode.generateQRcode();
+            contentPane.setLayout(new FlowLayout());
+            JLabel label = new JLabel(hash);
+            contentPane.add(label);
+            contentPane.updateUI();
                 /*try {
                     ImagePanelTest image2 = new ImagePanelTest();
                     image2.paintComponent(image2.getGraphics());
