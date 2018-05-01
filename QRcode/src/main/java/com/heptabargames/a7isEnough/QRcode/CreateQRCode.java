@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -24,21 +26,25 @@ public class CreateQRCode {
         public static final int WIDTH = 260;
         public static final int HEIGHT = 260;
 
-        public static String GenerateToken() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        public static String GenerateToken() throws NoSuchAlgorithmException {
             byte[] bytes = new byte[20];
             SecureRandom.getInstanceStrong().nextBytes(bytes);
             String token = Base64.getEncoder().encodeToString(bytes);
-            String hash;
-
-            Argon2 argon2 = Argon2Factory.create();
+            String hash = null;
             try {
-                // Hash password
-                hash = argon2.hash(2, 65536, 1, token);
+                MessageDigest md = MessageDigest.getInstance("SHA-512");
+                byte[] bytes1 = md.digest(token.getBytes(StandardCharsets.UTF_8));
+                StringBuilder sb = new StringBuilder();
+                for (byte aByte : bytes){
+                    sb.append(Integer.toString((aByte & 0xff)+ 0x100,16).substring(1));
+                }
+                hash = sb.toString();
 
-            } finally {
-                GenerateQRcode(token);
-                argon2.wipeArray(token.toCharArray());
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+
             }
+            GenerateQRcode(token);
             return hash;
 
         }
@@ -65,10 +71,8 @@ public class CreateQRCode {
             hash = GenerateToken();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
-        System.out.println(hash);
+            System.out.println(hash);
 
         }
 

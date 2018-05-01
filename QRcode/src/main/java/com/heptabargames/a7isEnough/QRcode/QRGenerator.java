@@ -1,17 +1,22 @@
 package com.heptabargames.a7isEnough.QRcode;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class QRGenerator extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JButton generateButton;
+    private BufferedImage image;
 
     public QRGenerator() {
         setContentPane(contentPane);
@@ -20,7 +25,12 @@ public class QRGenerator extends JDialog {
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onOK();
+                File file = new File("qrCode.png");
+                JFileChooser fileChooser = new JFileChooser();
+                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    fileChooser.setSelectedFile(file);
+                    fileChooser.approveSelection();
+                }
             }
         });
 
@@ -33,7 +43,15 @@ public class QRGenerator extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
             CreateQRCode.generateQRcode();
+                /*try {
+                    ImagePanelTest image2 = new ImagePanelTest();
+                    image2.paintComponent(image2.getGraphics());
+                    } catch (IOException e2) {
+                    e2.printStackTrace();
+                }*/
             }
+
+
         });
 
         // call onCancel() when cross is clicked
