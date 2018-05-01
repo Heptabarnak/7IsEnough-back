@@ -170,6 +170,7 @@
 	let lastSectorClicked;
 	let zoneNumber = 0;
 	let beaconNumber = 0;
+	let modifState = -1;
 
     function initialize() {
         geocoder = new google.maps.Geocoder();
@@ -246,27 +247,44 @@
     });
 
 	function createZone() {
-        jsonObject.zones[zoneNumber] = {};
-        jsonObject.zones[zoneNumber].name = document.getElementById('nameZone').value;
-        jsonObject.zones[zoneNumber].description = document.getElementById('descriptionZone').value;
-        jsonObject.zones[zoneNumber].sectors = [];
+	    let index = zoneNumber;
+	    if(modifState > -1)
+        {
+            index = modifState;
+        }
+
+        if (typeof jsonObject.zones[index] === 'undefined')
+        {
+            jsonObject.zones[index] = {};
+        }
+
+        jsonObject.zones[index].name = document.getElementById('nameZone').value;
+        jsonObject.zones[index].description = document.getElementById('descriptionZone').value;
+
+        jsonObject.zones[index].sectors = [];
 
 		for(let i= 0; i < pointClick.length ; i++){
-			jsonObject.zones[zoneNumber].sectors.push(pointClick[i].id);
+			jsonObject.zones[index].sectors.push(pointClick[i].id);
 		}
 
-		jsonObject.zones[zoneNumber].beacons = [];
-		pointClick.length = 0;
+        if (!jsonObject.zones[index].hasOwnProperty("beacons")) {
+            jsonObject.zones[index].beacons = [];
+        }
+
+        pointClick.length = 0;
 
 		document.getElementById('nameZone').value = "";
 		document.getElementById('descriptionZone').value = "";
 
-        for(let i = 0; i < jsonObject.zones[zoneNumber].sectors.length; i++)
+        for(let i = 0; i < jsonObject.zones[index].sectors.length; i++)
         {
-            lockSectorsInZone(zoneNumber, i);
+            lockSectorsInZone(index, i);
         }
 
-        zoneNumber++;
+        if (modifState > -1)
+        {
+            modifState = -1;
+        }
 
 	}
 
@@ -418,6 +436,34 @@
                             }
 							this.selected = 0;
 						}
+						else if (this.selected === 2 && pointClick.length === 0)
+                        {
+                            let zoneIndex = -1;
+                            for (let k = 0 ; k < jsonObject.zones.length ; k++)
+                            {
+                                if (jsonObject.zones[k].sectors.includes(lastSectorClicked.id))
+                                {
+                                    zoneIndex = k;
+                                }
+                            }
+                            document.getElementById('nameZone').value = jsonObject.zones[zoneIndex].name;
+                            document.getElementById('descriptionZone').value = jsonObject.zones[zoneIndex].description;
+
+                            for (let l = 0 ; l < jsonObject.zones[zoneIndex].sectors.length ; l++)
+                            {
+                                let sectorX = Math.floor(jsonObject.zones[zoneIndex].sectors[l]/jsonObject.sector.nbPerLine);
+                                let sectorY = jsonObject.zones[zoneIndex].sectors[l] % jsonObject.sector.nbPerLine;
+
+                                sectors[sectorX][sectorY].setOptions({
+                                    fillColor: '#00FF00'
+                                });
+                                sectors[sectorX][sectorY].selected = 1;
+
+                                pointClick.push(sectors[sectorX][sectorY]);
+                            }
+                            modifState = zoneIndex;
+                            return alert("ATTENTION : Supprimer un ou plusieurs secteurs de la zone n'entraînera pas la suppression des balises existantes sur ce(s) secteur(s) de la zone en question !");
+                        }
 
 					});
 					
