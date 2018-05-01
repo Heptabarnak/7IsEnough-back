@@ -13,8 +13,7 @@ public class ImagePanelTest extends JPanel {
     public ImagePanelTest() throws IOException {
         image = ImageIO.read(new File("qrCode.png"));
     }
-    protected void paintComponent(Graphics g, JButton jButton) {
-       // jButton.paintComponent(g);
+    protected void paintComponent(Graphics g) {
         g.drawImage(image, 0, 0, null);
     }
     }
