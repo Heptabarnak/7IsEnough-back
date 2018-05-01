@@ -1,5 +1,9 @@
 package com.heptabargames.a7isEnough.QRcode;
 
+import com.sun.javafx.iio.ImageStorage;
+import net.glxn.qrgen.core.image.ImageType;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,11 +30,20 @@ public class QRGenerator extends JDialog {
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                File file = new File("qrCode.png");
                 JFileChooser fileChooser = new JFileChooser();
                 if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    fileChooser.setSelectedFile(file);
-                    fileChooser.approveSelection();
+                    String nomFichier = fileChooser.getSelectedFile().toString();
+                    if (!nomFichier.endsWith(".png")){
+                        nomFichier = nomFichier + ".png";
+                    }
+                    File file = new File(nomFichier);
+                    System.out.println(nomFichier);
+                    try {
+                        BufferedImage image = ImageIO.read(new File("qrCode.png"));
+                        ImageIO.write(image,"PNG", file);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
