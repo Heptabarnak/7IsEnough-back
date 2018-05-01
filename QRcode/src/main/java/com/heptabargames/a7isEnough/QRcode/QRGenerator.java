@@ -21,7 +21,7 @@ public class QRGenerator extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JButton generateButton;
-    private int actualize = 0;
+    private JFormattedTextField formattedTextField1;
 
     public QRGenerator() {
         setContentPane(contentPane);
@@ -56,18 +56,12 @@ public class QRGenerator extends JDialog {
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                actualize++;
                 String hash =  CreateQRCode.generateQRcode();
+                formattedTextField1.setValue(hash);
                 contentPane.setLayout(new FlowLayout());
                 JLabel label = new JLabel(hash);
-                JLabel image = new JLabel(new ImageIcon("qrCode.png"));
-                if (actualize==1){
-                    contentPane.remove(label);
-                    contentPane.remove(image);
-                }
-                contentPane.add(label);
-                contentPane.add(image);
-                pack();
+                //JLabel image = new JLabel(new ImageIcon("qrCode.png"));
+                //contentPane.add(image);
                 contentPane.updateUI();
             }
 
