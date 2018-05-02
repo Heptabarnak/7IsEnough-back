@@ -1,8 +1,5 @@
 package com.heptabargames.a7isEnough.QRcode;
 
-import com.sun.javafx.iio.ImageStorage;
-import net.glxn.qrgen.core.image.ImageType;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,7 +18,7 @@ public class QRGenerator extends JDialog {
     private JButton buttonCancel;
     private JButton generateButton;
     private JFormattedTextField formattedTextField1;
-    private JTextPane générerLeHashDuTextPane;
+    private JTextPane genererLeHashDuTextPane;
     private JTextPane sauvegarderLImageGénéréTextPane;
     private JTextPane quitterLApplicationViaTextPane;
 
@@ -211,15 +207,15 @@ public class QRGenerator extends JDialog {
         gbc.gridy = 4;
         gbc.fill = GridBagConstraints.VERTICAL;
         panel4.add(spacer2, gbc);
-        générerLeHashDuTextPane = new JTextPane();
-        générerLeHashDuTextPane.setText("Générer le hash du QRcode via le bouton générer.");
+        genererLeHashDuTextPane = new JTextPane();
+        genererLeHashDuTextPane.setText("Générer le hash du QRcode via le bouton Generate.");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel4.add(générerLeHashDuTextPane, gbc);
+        panel4.add(genererLeHashDuTextPane, gbc);
         sauvegarderLImageGénéréTextPane = new JTextPane();
-        sauvegarderLImageGénéréTextPane.setText("Sauvegarder l'image généré (QRcode via le bouton save ).");
+        sauvegarderLImageGénéréTextPane.setText("Sauvegarder l'image généré (QRcode) via le bouton Save.");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
