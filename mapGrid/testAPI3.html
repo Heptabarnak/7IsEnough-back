@@ -185,6 +185,8 @@
     }
 
     function printJSON() {
+        // TODO : penser à enlever les infos de debug dans 'cadre' et 'info'
+        document.getElementById('cadre').innerHTML = "";
         document.getElementById('info').innerHTML += jsonObject.zones[0].name;
 		document.getElementById('cadre').innerHTML += JSON.stringify(jsonObject);
 
@@ -465,7 +467,6 @@
                                 pointClick.push(sectors[sectorX][sectorY]);
                             }
                             modifState = zoneIndex;
-                            doubleClicked = false;
                             return alert("ATTENTION : Supprimer un ou plusieurs secteurs de la zone n'entraînera pas la suppression des balises existantes sur ce(s) secteur(s) de la zone en question !");
                         }
 
