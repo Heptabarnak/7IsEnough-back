@@ -20,12 +20,13 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<input id="address" type="text" value="Tabuant" title="address">
-								<input type="button" value="Encode" onclick="codeAddress()">
-								<input type="button" value="Print JSON" onclick="printJSON()">
-								<input type="button" value="Save JSON" onclick="download()">
+                                <input id="sectorsDist" type="text" value="200" title="sectorsDist">
+								<input type="button" value="Créer quadrillage" onclick="codeAddress()">
+								<input type="button" value="Afficher JSON" onclick="printJSON()">
+								<input type="button" value="Enregistrer JSON" onclick="download()">
 							</div>
 							<div class="col-lg-12">
-								<h3>Importer un fichier JSON</h3>
+								<h3>Importer un fichier JSON (après quadrillage)</h3>
 								<input id="file" type="file" />
 							</div>
 						</div>
@@ -43,7 +44,7 @@
 										<label for="descriptionZone">Description de la zone</label>
 										<input type="text" name="descriptionZone" id="descriptionZone">
 									</p>
-									<input type="button" value="Créer zone" onclick="createZone()" class="btn btn-primary">
+									<input type="button" id="createZoneButton" value="Créer zone" onclick="createZone()" class="btn btn-primary">
 								</form>
 							</div>
 							<div class="col-lg-6">
@@ -219,7 +220,7 @@
         geocoder = new google.maps.Geocoder();
         const latlng = new google.maps.LatLng(45.75, 4.85);
         const mapOptions = {
-            zoom: 8,
+            zoom: 12,
             center: latlng
         };
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -227,6 +228,8 @@
     }
 
     function printJSON() {
+        // TODO : penser à enlever les infos de debug dans 'cadre' et 'info'
+        document.getElementById('cadre').innerHTML = "";
         document.getElementById('info').innerHTML += jsonObject.zones[0].name;
 		document.getElementById('cadre').innerHTML += JSON.stringify(jsonObject);
 
@@ -328,8 +331,9 @@
         {
             modifState = -1;
         }
+        document.getElementById('createZoneButton').value = "Créer zone";
 
-	}
+    }
 
 	function createBeacon(){
         let zoneFounded = false;
@@ -355,7 +359,7 @@
                 jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].description = document.getElementById('descriptionBeacon').value;
                 jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].monumentDesc = document.getElementById('descriptionMonument').value;
                 beaconNumber++;
-                alert("Le repère a été créé avec succès");
+                alert("La balise a été créée avec succès");
             }
             else    // Le dernier secteur cliqué n'appartient à aucune zone déjà existante
             {
@@ -414,8 +418,7 @@
 
             document.getElementById('info').innerHTML += results[0].geometry.bounds.toString() + '</br>';
 
-            const excLat = 0.2;
-            const excLng = 0.2;
+            const dist = document.getElementById('sectorsDist').value / 1000;
 
             const m1Lng = marker1.getPosition().lng();
             const m2Lat = marker2.getPosition().lat();
@@ -435,14 +438,14 @@
             while (newLat > m2Lat) {
                 if (!sectors[i]) sectors[i] = [];
                 j = 0;
-                newLat = m3Lat - (i + 1) * (excLat / r_earth) * (180 / Math.PI);
-                newLng = m3Lng + ((j + 1) * (excLng / r_earth) * (180 / Math.PI) / Math.cos(m3Lat * Math.PI / 180));
+                newLat = m3Lat - (i + 1) * (dist / r_earth) * (180 / Math.PI);
+                newLng = m3Lng + ((j + 1) * (dist / r_earth) * (180 / Math.PI) / Math.cos(m3Lat * Math.PI / 180));
                 while (newLng < m1Lng) {
                     if (!sectors[i][j]) sectors[i][j] = {};
 					prevLat = newLat;
 
-                    newLat = m3Lat - (i + 1) * (excLat / r_earth) * (180 / Math.PI);
-                    newLng = m3Lng + ((j + 1) * (excLng / r_earth) * (180 / Math.PI) / Math.cos(m3Lat * Math.PI / 180));
+                    newLat = m3Lat - (i + 1) * (dist / r_earth) * (180 / Math.PI);
+                    newLng = m3Lng + ((j + 1) * (dist / r_earth) * (180 / Math.PI) / Math.cos(m3Lat * Math.PI / 180));
                     sectors[i][j] = new google.maps.Rectangle({
                         strokeColor: '#FFFFFF',
                         strokeOpacity: 0.8,
@@ -451,13 +454,14 @@
                         fillOpacity: 0.3,
                         map: map,
                         bounds: new google.maps.LatLngBounds(
-                            new google.maps.LatLng(m3Lat - (i * (excLat / r_earth) * (180 / Math.PI)), m3Lng + (j * (excLng / r_earth) * (180 / Math.PI) / Math.cos(newLat * Math.PI / 180))),
+                            new google.maps.LatLng(m3Lat - (i * (dist / r_earth) * (180 / Math.PI)), m3Lng + (j * (dist / r_earth) * (180 / Math.PI) / Math.cos(newLat * Math.PI / 180))),
                             new google.maps.LatLng(newLat, newLng))
                     });
 					sectors[i][j].id = comptId;
                     sectors[i][j].selected = 0;
 
                     google.maps.event.addListener(sectors[i][j], 'click', function () {
+                        let doubleClicked = lastSectorClicked === this;
                         lastSectorClicked = this;
                         if (this.selected === 0){
 							this.setOptions({
@@ -479,8 +483,9 @@
                             }
 							this.selected = 0;
 						}
-						else if (this.selected === 2 && pointClick.length === 0)
+						else if (this.selected === 2 && pointClick.length === 0 && doubleClicked)
                         {
+                            document.getElementById('createZoneButton').value = "Modifier zone";
                             let zoneIndex = -1;
                             for (let k = 0 ; k < jsonObject.zones.length ; k++)
                             {
@@ -510,7 +515,7 @@
 
 					});
 					
-					sectorsId[comptId] = new TxtOverlay(new google.maps.LatLng(m3Lat - (i)*(excLat / r_earth) * (180 / Math.PI), m3Lng + (j*(excLng / r_earth) * (180 / Math.PI) / Math.cos(prevLat * Math.PI/180))), 
+					sectorsId[comptId] = new TxtOverlay(new google.maps.LatLng(m3Lat - (i)*(dist / r_earth) * (180 / Math.PI), m3Lng + (j*(dist / r_earth) * (180 / Math.PI) / Math.cos(prevLat * Math.PI/180))),
 						"<div>" + comptId + "</div>", 
 						"customBox", 
 						map);
@@ -521,7 +526,7 @@
             } //for i Lat
 
             jsonObject.sector = {};
-            jsonObject.sector.size = excLat*1000;
+            jsonObject.sector.size = dist*1000;
             jsonObject.sector.nbPerLine = j;
             jsonObject.sector.origin = {};
             jsonObject.sector.origin.lng = m3Lng;
