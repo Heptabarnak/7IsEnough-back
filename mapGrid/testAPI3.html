@@ -313,7 +313,7 @@
                 jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].description = document.getElementById('descriptionBeacon').value;
                 jsonObject.zones[i].beacons[jsonObject.zones[i].beacons.length - 1].monumentDesc = document.getElementById('descriptionMonument').value;
                 beaconNumber++;
-                alert("Le repère a été créé avec succès");
+                alert("La balise a été créée avec succès");
             }
             else    // Le dernier secteur cliqué n'appartient à aucune zone déjà existante
             {
@@ -416,6 +416,7 @@
                     sectors[i][j].selected = 0;
 
                     google.maps.event.addListener(sectors[i][j], 'click', function () {
+                        let doubleClicked = lastSectorClicked === this;
                         lastSectorClicked = this;
                         if (this.selected === 0){
 							this.setOptions({
@@ -437,7 +438,7 @@
                             }
 							this.selected = 0;
 						}
-						else if (this.selected === 2 && pointClick.length === 0)
+						else if (this.selected === 2 && pointClick.length === 0 && doubleClicked)
                         {
                             document.getElementById('createZoneButton').value = "Modifier zone";
                             let zoneIndex = -1;
@@ -464,6 +465,7 @@
                                 pointClick.push(sectors[sectorX][sectorY]);
                             }
                             modifState = zoneIndex;
+                            doubleClicked = false;
                             return alert("ATTENTION : Supprimer un ou plusieurs secteurs de la zone n'entraînera pas la suppression des balises existantes sur ce(s) secteur(s) de la zone en question !");
                         }
 
