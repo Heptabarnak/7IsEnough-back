@@ -19,7 +19,7 @@ public class QRGenerator extends JDialog {
     private JButton generateButton;
     private JFormattedTextField formattedTextField1;
     private JTextPane genererLeHashDuTextPane;
-    private JTextPane sauvegarderLImageGénéréTextPane;
+    private JTextPane sauvegarderLImageGenereTextPane;
     private JTextPane quitterLApplicationViaTextPane;
 
     public QRGenerator() {
@@ -214,13 +214,13 @@ public class QRGenerator extends JDialog {
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         panel4.add(genererLeHashDuTextPane, gbc);
-        sauvegarderLImageGénéréTextPane = new JTextPane();
-        sauvegarderLImageGénéréTextPane.setText("Sauvegarder l'image généré (QRcode) via le bouton Save.");
+        sauvegarderLImageGenereTextPane = new JTextPane();
+        sauvegarderLImageGenereTextPane.setText("Sauvegarder l'image généré (QRcode) via le bouton Save.");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.BOTH;
-        panel4.add(sauvegarderLImageGénéréTextPane, gbc);
+        panel4.add(sauvegarderLImageGenereTextPane, gbc);
         final JPanel spacer3 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
