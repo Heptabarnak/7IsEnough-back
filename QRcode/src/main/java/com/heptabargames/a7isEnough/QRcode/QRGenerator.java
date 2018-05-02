@@ -96,6 +96,18 @@ public class QRGenerator extends JDialog {
     }
 
     public static void main(String[] args) {
+        try{
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         QRGenerator dialog = new QRGenerator();
         dialog.pack();
         dialog.setVisible(true);
