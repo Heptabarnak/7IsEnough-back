@@ -97,6 +97,7 @@
 		</div>
 	</div>
 <div id="info"></div>
+<h3>Informations d'une zone :</h3>
 <div id="cadre"></div>
 
     <!-- Modal Documentation -->
@@ -384,6 +385,20 @@
         document.getElementById('hashToken').value = "";
 	}
 
+	function findZoneBySectorId(sectorId)
+    {
+        let index = -1;
+        for (let i=0 ; i<jsonObject.zones.length; i++)
+        {
+            if(jsonObject.zones[i].sectors.includes(sectorId))
+            {
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
     function codeAddress() {
 
         for (const x of sectors) {
@@ -494,17 +509,37 @@
                             }
 							this.selected = 0;
 						}
+						else if (this.selected === 2)
+                        {
+                            document.getElementById('cadre').innerHTML = "";
+                            let zoneIndex = findZoneBySectorId(lastSectorClicked.id);
+
+                            if (zoneIndex > -1)
+                            {
+                                document.getElementById('cadre').innerHTML += "Nome de la zone : " + jsonObject.zones[zoneIndex].name + '</br>';
+                                document.getElementById('cadre').innerHTML += "Description de la zone : " + jsonObject.zones[zoneIndex].description + '</br>';
+                                document.getElementById('cadre').innerHTML += "Secteurs composant la zone : ";
+                                for (let k=0; k < jsonObject.zones[zoneIndex].sectors.length ; k++)
+                                {
+                                    document.getElementById('cadre').innerHTML += jsonObject.zones[zoneIndex].sectors[k] + " ";
+                                }
+                                document.getElementById('cadre').innerHTML += '</br>';
+                                document.getElementById('cadre').innerHTML += "Liste des balises de la zone : " + '<ul>';
+                                for (let k=0 ; k < jsonObject.zones[zoneIndex].beacons.length ; k++)
+                                {
+                                    document.getElementById('cadre').innerHTML += "<li>Balise n°" + jsonObject.zones[zoneIndex].beacons[k].id + " : " + jsonObject.zones[zoneIndex].beacons[k].name + "</li>";
+                                }
+                                document.getElementById('cadre').innerHTML += '</ul>';
+
+                            }
+
+
+                        }
 						else if (this.selected === 2 && pointClick.length === 0 && doubleClicked)
                         {
                             document.getElementById('createZoneButton').value = "Modifier zone";
-                            let zoneIndex = -1;
-                            for (let k = 0 ; k < jsonObject.zones.length ; k++)
-                            {
-                                if (jsonObject.zones[k].sectors.includes(lastSectorClicked.id))
-                                {
-                                    zoneIndex = k;
-                                }
-                            }
+                            let zoneIndex = findZoneBySectorId(lastSectorClicked.id);
+
                             document.getElementById('nameZone').value = jsonObject.zones[zoneIndex].name;
                             document.getElementById('descriptionZone').value = jsonObject.zones[zoneIndex].description;
 
