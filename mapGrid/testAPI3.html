@@ -537,32 +537,31 @@
                                 }
                                 document.getElementById('cadre').innerHTML += '</ul>';
 
+                                if (pointClick.length === 0 && doubleClicked)
+                                {
+                                    document.getElementById('createZoneButton').value = "Modifier zone";
+                                    let zoneIndex = findZoneBySectorId(lastSectorClicked.id);
+
+                                    document.getElementById('nameZone').value = jsonObject.zones[zoneIndex].name;
+                                    document.getElementById('descriptionZone').value = jsonObject.zones[zoneIndex].description;
+
+                                    for (let l = 0 ; l < jsonObject.zones[zoneIndex].sectors.length ; l++)
+                                    {
+                                        let sectorX = Math.floor(jsonObject.zones[zoneIndex].sectors[l]/jsonObject.sector.nbPerLine);
+                                        let sectorY = jsonObject.zones[zoneIndex].sectors[l] % jsonObject.sector.nbPerLine;
+
+                                        sectors[sectorX][sectorY].setOptions({
+                                            fillColor: '#00FF00'
+                                        });
+                                        sectors[sectorX][sectorY].selected = 1;
+
+                                        pointClick.push(sectors[sectorX][sectorY]);
+                                    }
+                                    modifState = zoneIndex;
+                                    return alert("ATTENTION : Supprimer un ou plusieurs secteurs de la zone n'entraînera pas la suppression des balises existantes sur ce(s) secteur(s) de la zone en question !");
+                                }
                             }
 
-
-                        }
-						else if (this.selected === 2 && pointClick.length === 0 && doubleClicked)
-                        {
-                            document.getElementById('createZoneButton').value = "Modifier zone";
-                            let zoneIndex = findZoneBySectorId(lastSectorClicked.id);
-
-                            document.getElementById('nameZone').value = jsonObject.zones[zoneIndex].name;
-                            document.getElementById('descriptionZone').value = jsonObject.zones[zoneIndex].description;
-
-                            for (let l = 0 ; l < jsonObject.zones[zoneIndex].sectors.length ; l++)
-                            {
-                                let sectorX = Math.floor(jsonObject.zones[zoneIndex].sectors[l]/jsonObject.sector.nbPerLine);
-                                let sectorY = jsonObject.zones[zoneIndex].sectors[l] % jsonObject.sector.nbPerLine;
-
-                                sectors[sectorX][sectorY].setOptions({
-                                    fillColor: '#00FF00'
-                                });
-                                sectors[sectorX][sectorY].selected = 1;
-
-                                pointClick.push(sectors[sectorX][sectorY]);
-                            }
-                            modifState = zoneIndex;
-                            return alert("ATTENTION : Supprimer un ou plusieurs secteurs de la zone n'entraînera pas la suppression des balises existantes sur ce(s) secteur(s) de la zone en question !");
                         }
 
 					});
