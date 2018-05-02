@@ -53,7 +53,8 @@
 								<form id="beaconForm">
 									<p>
 										<label for="difficulty">Difficulté (1 à 5)</label>
-										<input type="range" name="difficulty" id="difficulty" min="1" max="5" required>
+                                        <div id="difficultyValue"></div>
+										<input type="range" name="difficulty" id="difficulty" min="1" max="5" required oninput="updateDifficulty(this.value)">
 									</p>
 									<p>
 										<label for="themeBeacon">Theme</label>
@@ -223,6 +224,7 @@
 	let modifState = -1;
 
     function initialize() {
+        document.getElementById('difficultyValue').innerHTML = document.getElementById('difficulty').value;
         geocoder = new google.maps.Geocoder();
         const latlng = new google.maps.LatLng(45.75, 4.85);
         const mapOptions = {
@@ -347,6 +349,10 @@
 
     }
 
+    function updateDifficulty(newVal)
+    {
+        document.getElementById('difficultyValue').innerHTML = newVal;
+    }
 	function createBeacon(){
         let zoneFounded = false;
         let i = -1;
