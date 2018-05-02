@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
     <title>Tests de l'api</title>
 </head>
 <body onload="initialize()">
@@ -58,7 +59,7 @@
 										<label for="themeBeacon">Theme</label>
 										<select name="themeBeacon" id="themeBeacon">
 											<option value="SP" selected>Sport</option>
-											<option value="CUL">Culture</option>
+											<option value="CU">Culture</option>
 											<option value="BE">Bord de l'eau</option>
 											<option value="XX">Autre</option>
 										</select>
@@ -258,12 +259,12 @@
         }
     }
 
-    function lockSectorsInZone(i, j) {
+    function lockSectorsInZone(i, j, color) {
         let sectorX = Math.floor(jsonObject.zones[i].sectors[j]/jsonObject.sector.nbPerLine);
         let sectorY = jsonObject.zones[i].sectors[j] % jsonObject.sector.nbPerLine;
 
         sectors[sectorX][sectorY].setOptions({
-            fillColor: '#0000FF'
+            fillColor: color //'#0000FF'
         });
         sectors[sectorX][sectorY].selected = 2;
     }
@@ -278,8 +279,9 @@
             jsonObject = JSON.parse(jsonToParse);
 
             for(let i = 0; i < jsonObject.zones.length; i++) {
+                let color = randomColor({hue: 'blue'});
                 for (let j = 0; j < jsonObject.zones[i].sectors.length; j++) {
-                    lockSectorsInZone(i, j);
+                    lockSectorsInZone(i, j, color);
                 }
                 for (let j = 0; j < jsonObject.zones[i].beacons.length; j++) {
                     if (jsonObject.zones[i].beacons[j].id > beaconNumber) {
@@ -325,9 +327,10 @@
 		document.getElementById('nameZone').value = "";
 		document.getElementById('descriptionZone').value = "";
 
+		let color = randomColor({hue: 'blue'});
         for(let i = 0; i < jsonObject.zones[index].sectors.length; i++)
         {
-            lockSectorsInZone(index, i);
+            lockSectorsInZone(index, i, color);
         }
 
         if (modifState > -1)
