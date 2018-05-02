@@ -36,21 +36,21 @@
 						<div class="row">
 							<div class="col-lg-6">
 								<h3>Création de zone</h3>
-								<form>
+								<form id="zoneForm">
 									<p>
 										<label for="nameZone">Nom de la zone</label>
 										<input type="text" name="nameZone" id="nameZone">
 									</p>
 									<p>
 										<label for="descriptionZone">Description de la zone</label>
-										<input type="text" name="descriptionZone" id="descriptionZone">
+                                        <textarea id="descriptionZone" name="descriptionZone" form="zoneForm" required></textarea>
 									</p>
 									<input type="button" id="createZoneButton" value="Créer zone" onclick="createZone()" class="btn btn-primary">
 								</form>
 							</div>
 							<div class="col-lg-6">
 								<h3>Ajout d'une balise</h3>
-								<form>
+								<form id="beaconForm">
 									<p>
 										<label for="difficulty">Difficulté (1 à 5)</label>
 										<input type="range" name="difficulty" id="difficulty" min="1" max="5" required>
@@ -70,11 +70,11 @@
 									</p>
 									<p>
 										<label for="descriptionBeacon">Description</label>
-										<input type="text" name="descriptionBeacon" id="descriptionBeacon" required>
+                                        <textarea id="descriptionBeacon" name="descriptionBeacon" form="beaconForm" required></textarea>
 									</p>
 									<p>
 										<label for="descriptionMonument">Description du monument associé</label>
-										<input type="text" name="descriptionMonument" id="descriptionMonument" required>
+                                        <textarea id="descriptionMonument" name="descriptionMonument" form="beaconForm" required></textarea>
 									</p>
 									<p>
 										<label for="hashToken">Hash du token</label>
