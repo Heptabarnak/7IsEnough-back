@@ -22,6 +22,9 @@ public class QRGenerator extends JDialog {
     private JButton buttonCancel;
     private JButton generateButton;
     private JFormattedTextField formattedTextField1;
+    private JTextPane générerLeHashDuTextPane;
+    private JTextPane sauvegarderLImageGénéréTextPane;
+    private JTextPane quitterLApplicationViaTextPane;
 
     public QRGenerator() {
         setContentPane(contentPane);
@@ -109,6 +112,7 @@ public class QRGenerator extends JDialog {
             e.printStackTrace();
         }
         QRGenerator dialog = new QRGenerator();
+        //dialog.setSize(475,150);
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
