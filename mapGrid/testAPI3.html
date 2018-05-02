@@ -43,7 +43,7 @@
 									</p>
 									<p>
 										<label for="descriptionZone">Description de la zone</label>
-                                        <textarea id="descriptionZone" name="descriptionZone" form="zoneForm" required></textarea>
+                                        <textarea class="description" id="descriptionZone" name="descriptionZone" form="zoneForm" required></textarea>
 									</p>
 									<input type="button" id="createZoneButton" value="Créer zone" onclick="createZone()" class="btn btn-primary">
 								</form>
@@ -70,11 +70,11 @@
 									</p>
 									<p>
 										<label for="descriptionBeacon">Description</label>
-                                        <textarea id="descriptionBeacon" name="descriptionBeacon" form="beaconForm" required></textarea>
+                                        <textarea class="description" id="descriptionBeacon" name="descriptionBeacon" form="beaconForm" required></textarea>
 									</p>
 									<p>
 										<label for="descriptionMonument">Description du monument associé</label>
-                                        <textarea id="descriptionMonument" name="descriptionMonument" form="beaconForm" required></textarea>
+                                        <textarea class="description" id="descriptionMonument" name="descriptionMonument" form="beaconForm" required></textarea>
 									</p>
 									<p>
 										<label for="hashToken">Hash du token</label>
@@ -111,24 +111,25 @@
                 <div class="modal-body">
                     <p>
                         <h3>1. Quadrillage de la ville</h3>
-                        Mettre une ville (exemple: Lyon) dans le champs Ville => Mettre une distance correspondant à la longeur en mètre des secteurs pour le quadrillage
-                        =>Appuyer sur le button Créer quadrillage => Une carte centrée sur la ville souhaitée apparaît avec un quadrillage en secteur de celle-ci.
-                        <h3>1.Bis Importer des zones et balise via un fichier</h3>
+                        Mettre une ville (exemple: Lyon) dans le champ Ville => Mettre une distance correspondant à la longeur en mètre des secteurs pour le quadrillage (200m recommandé)
+                        =>Appuyer sur le bouton Créer quadrillage => Une carte centrée sur la ville souhaitée apparaît avec un quadrillage en secteurs de celle-ci.
+                        <h3>1.Bis Importer des zones et balises via un fichier</h3>
                         <strong>Requis: Avoir un quadrillage complet de la ville</strong><br/>
-                        Appuyer sur Choisir un fichier => Sélectionner un fichier contenant les zones et balise d'une ville déja quadriller
-                        => Appuyer sur Ouvrir => L'ensemble des zones et des balises associé au fichier sont affichés sur la carte.
+                        Appuyer sur Choisir un fichier => Sélectionner un fichier contenant les zones et balises d'une ville déja quadrillée
+                        => Appuyer sur Ouvrir => L'ensemble des zones et des balises associées au fichier sont affichées sur la carte.
                         <h3>2. Création de Zone</h3>
                         <strong>Requis: Avoir un quadrillage complet de la ville</strong> <br/>
-                        Cliquer sur un à plusieurs secteurs du quadrillage (re-cliquer pour déselectionner le ou les secteurs) => Les secteurs selectionnés deviennent rouge =>
+                        Cliquer sur un ou plusieurs secteurs du quadrillage (re-cliquer pour déselectionner un secteur) => Les secteurs selectionnés deviennent verts =>
                         Dans la partie "Création de Zone", il faut mettre un nom de zone ainsi qu'une description => Appuyer sur le bouton Créer Zone => Votre zone est alors créée et les secteurs selectionnés deviennent bleu
                         <h3>3. Ajout d'une balise</h3>
                         <strong>Requis: Avoir un quadrillage complet et avoir créer une zone</strong><br/>
-                        Cliquer sur le secteur où l'on souhaite ajouter la balise (possibilité de desélectionné le secteur) => Définir une difficulté, un thème, un nom, une descrition de la balise, une description associé au monument,
-                        un hash du token du QRCode associé à la balise => Appuyer sur le boutton Créer la balise => La balise est alors ajoutée à la zone associé.
-                        <h3>4. Save JSON</h3>
+                        Cliquer sur le secteur où l'on souhaite ajouter la balise (la balise est créée dans le dernier secteur cliqué) => Définir une difficulté, un thème, un nom,
+                        une descrition de la balise, une description associé au monument, un hash du token du QRCode associé à la balise => Appuyer sur le boutton Créer la balise
+                        => La balise est alors ajoutée à la zone associée.
+                        <h3>4. Enregistrer JSON</h3>
                         <strong>Requis: Avoir un quadrillage complet</strong><br/>
                         Appuyer sur le boutton Enregistrer JSON => Un fichier appelé "map.json" devrait se télécharger. Ce fichier contient les caractéristiques de notre quadrillage,
-                        les zones créées avec leurs caractéristiques ainsi que les balises associés à chacune des zones.
+                        les zones créées avec leurs caractéristiques ainsi que les balises associées à chacune des zones.
                     </p>
                 </div>
                 <div class="modal-footer">

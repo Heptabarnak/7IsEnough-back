@@ -35,3 +35,7 @@ html, body {
       border: hidden;
       position: absolute;
 }
+
+.description {
+    height:60px;
+}
