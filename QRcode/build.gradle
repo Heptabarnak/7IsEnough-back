@@ -14,8 +14,9 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation 'com.github.kenglxn.QRGen:javase:2.4.0'
     implementation 'com.github.skrymer:qrbuilder:57ad193c37'
-    compile 'de.mkammerer:argon2-jvm:2.4'
-
-
+    implementation 'de.mkammerer:argon2-jvm:2.4'
 
 }
+
+apply plugin: 'application'
+mainClassName = "com.heptabargames.a7isEnough.QRcode.QRGenerator"
