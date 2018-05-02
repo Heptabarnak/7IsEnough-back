@@ -19,7 +19,7 @@
 						<div id="map" style="width: 550px; height: 480px;"></div>
 						<div class="row">
 							<div class="col-lg-12">
-								<input id="address" type="text" value="Tabuant" title="address">
+								<input id="address" type="text" value="Lyon" title="address">
                                 <input id="sectorsDist" type="text" value="200" title="sectorsDist">
 								<input type="button" value="Créer quadrillage" onclick="codeAddress()">
 								<input type="button" value="Afficher JSON" onclick="printJSON()">
@@ -228,7 +228,7 @@
     }
 
     function printJSON() {
-        // TODO : penser à enlever les infos de debug dans 'cadre' et 'info'
+        // TODO : penser à enlever les infos de debug dans 'cadre' et 'info' et bouton "Afficher JSON"
         document.getElementById('cadre').innerHTML = "";
         document.getElementById('info').innerHTML += jsonObject.zones[0].name;
 		document.getElementById('cadre').innerHTML += JSON.stringify(jsonObject);
@@ -238,7 +238,7 @@
     function download() {
         let filename = "map.json";
         let type = "json";
-        let file = new Blob([JSON.stringify(jsonObject)], {type: type});
+        let file = new Blob([JSON.stringify(jsonObject, null, 4)], {type: type});
         if (window.navigator.msSaveOrOpenBlob) // IE10+
             window.navigator.msSaveOrOpenBlob(file, filename);
         else { // Others
@@ -330,6 +330,10 @@
         if (modifState > -1)
         {
             modifState = -1;
+        }
+        else
+        {
+            zoneNumber++;
         }
         document.getElementById('createZoneButton').value = "Créer zone";
 
