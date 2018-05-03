@@ -24,7 +24,7 @@ public class CreateQRCode {
     private static final int HEIGHT = 260;
 
     private static String GenerateToken() throws NoSuchAlgorithmException {
-        byte[] bytes = new byte[20];
+        byte[] bytes = new byte[60];
         SecureRandom.getInstanceStrong().nextBytes(bytes);
         String token = Base64.getEncoder().encodeToString(bytes);
         String hash = null;
