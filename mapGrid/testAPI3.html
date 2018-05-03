@@ -51,6 +51,59 @@
 					<div  class="form-row">
 						<input type="button" value="Enregistrer JSON" class="btn btn-secondary" onclick="download()">
 						<input type="button" value="Afficher JSON" class="btn btn-light" onclick="printJSON()">
+					<div class="col-lg-5">
+						<div class="row">
+							<div class="col-lg-6">
+								<h3>Création de zone</h3>
+								<form id="zoneForm">
+									<p>
+										<label for="nameZone">Nom de la zone</label>
+										<input type="text" name="nameZone" id="nameZone">
+									</p>
+									<p>
+										<label for="descriptionZone">Description de la zone</label>
+                                        <textarea class="description" id="descriptionZone" name="descriptionZone" form="zoneForm" required></textarea>
+									</p>
+									<input type="button" id="createZoneButton" value="Créer zone" onclick="createZone()" class="btn btn-primary">
+								</form>
+							</div>
+							<div class="col-lg-6">
+								<h3>Ajout d'une balise</h3>
+								<form id="beaconForm">
+									<p>
+										<label for="difficulty">Difficulté (1 à 5)</label>
+                                        <div id="difficultyValue"></div>
+										<input type="range" name="difficulty" id="difficulty" min="1" max="5" required oninput="updateDifficulty(this.value)">
+									</p>
+									<p>
+										<label for="themeBeacon">Theme</label>
+										<select name="themeBeacon" id="themeBeacon">
+											<option value="SP" selected>Sport</option>
+											<option value="CU">Culture</option>
+											<option value="BE">Bord de l'eau</option>
+											<option value="XX">Autre</option>
+										</select>
+									</p>
+									<p>
+										<label for="nameBeacon">Nom</label>
+										<input type="text" name="nameBeacon" id="nameBeacon" required>
+									</p>
+									<p>
+										<label for="descriptionBeacon">Description</label>
+                                        <textarea class="description" id="descriptionBeacon" name="descriptionBeacon" form="beaconForm" required></textarea>
+									</p>
+									<p>
+										<label for="descriptionMonument">Description du monument associé</label>
+                                        <textarea class="description" id="descriptionMonument" name="descriptionMonument" form="beaconForm" required></textarea>
+									</p>
+									<p>
+										<label for="hashToken">Hash du token</label>
+										<input type="text" name="hashToken" id="hashToken" required>
+									</p>
+									<input id="beaconButton" type="button" value="Créer la balise" onclick="createBeacon()">
+								</form>
+							</div>
+						</div>
 					</div>
 				</form>
 				<form style="margin-top: 20px">
@@ -249,6 +302,7 @@
 	let modifState = -1;
 
     function initialize() {
+        changeBeaconFormAccessibility(true);
         document.getElementById('difficultyValue').innerHTML = document.getElementById('difficulty').value;
         geocoder = new google.maps.Geocoder();
         const latlng = new google.maps.LatLng(45.75, 4.85);
@@ -378,6 +432,7 @@
     {
         document.getElementById('difficultyValue').innerHTML = newVal;
     }
+
 	function createBeacon(){
         let zoneFounded = false;
         let i = -1;
@@ -430,6 +485,16 @@
         return index;
     }
 
+    function changeBeaconFormAccessibility(disable)
+	{
+		document.getElementById('difficulty').disabled = disable;
+		document.getElementById('themeBeacon').disabled = disable;
+		document.getElementById('nameBeacon').disabled = disable;
+		document.getElementById('descriptionBeacon').disabled = disable;
+		document.getElementById('descriptionMonument').disabled = disable;
+		document.getElementById('hashToken').disabled = disable;
+		document.getElementById('beaconButton').disabled = disable;
+	}
     function codeAddress() {
 
         for (const x of sectors) {
@@ -521,6 +586,7 @@
                         let doubleClicked = lastSectorClicked === this;
                         lastSectorClicked = this;
                         if (this.selected === 0){
+                            changeBeaconFormAccessibility(true);
 							this.setOptions({
 								fillColor: '#00FF00'
 							});
@@ -530,6 +596,7 @@
 							this.selected = 1;
                         }
 						else if (this.selected === 1){
+                            changeBeaconFormAccessibility(true);
 							this.setOptions({
 								fillColor: '#FF0000'
 							});
@@ -542,6 +609,7 @@
 						}
 						else if (this.selected === 2)
                         {
+                            changeBeaconFormAccessibility(false);
                             document.getElementById('cadre').innerHTML = "";
                             let zoneIndex = findZoneBySectorId(lastSectorClicked.id);
 
@@ -550,12 +618,15 @@
                                 document.getElementById('cadre').innerHTML += "Nome de la zone : " + jsonObject.zones[zoneIndex].name + '</br>';
                                 document.getElementById('cadre').innerHTML += "Description de la zone : " + jsonObject.zones[zoneIndex].description + '</br>';
                                 document.getElementById('cadre').innerHTML += "Secteurs composant la zone : ";
+
                                 for (let k=0; k < jsonObject.zones[zoneIndex].sectors.length ; k++)
                                 {
                                     document.getElementById('cadre').innerHTML += jsonObject.zones[zoneIndex].sectors[k] + " ";
                                 }
+
                                 document.getElementById('cadre').innerHTML += '</br>';
-                                document.getElementById('cadre').innerHTML += "Liste des balises de la zone : " + '<ul>';
+                                document.getElementById('cadre').innerHTML += "Liste des " + jsonObject.zones[zoneIndex].beacons.length + " balises de la zone : " + '<ul>';
+
                                 for (let k=0 ; k < jsonObject.zones[zoneIndex].beacons.length ; k++)
                                 {
                                     document.getElementById('cadre').innerHTML += "<li>Balise n°" + jsonObject.zones[zoneIndex].beacons[k].id + " : " + jsonObject.zones[zoneIndex].beacons[k].name + "</li>";
