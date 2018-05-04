@@ -5,14 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,44 +25,33 @@ public class QRGenerator extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    String nomFichier = fileChooser.getSelectedFile().toString();
-                    if (!nomFichier.endsWith(".png")) {
-                        nomFichier = nomFichier + ".png";
-                    }
-                    File file = new File(nomFichier);
-                    System.out.println(nomFichier);
-                    try {
-                        BufferedImage image = ImageIO.read(new File("qrCode.png"));
-                        ImageIO.write(image, "PNG", file);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
+        buttonOK.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                String nomFichier = fileChooser.getSelectedFile().toString();
+                if (!nomFichier.endsWith(".png")) {
+                    nomFichier = nomFichier + ".png";
+                }
+                File file = new File(nomFichier);
+                System.out.println(nomFichier);
+                try {
+                    BufferedImage image = ImageIO.read(new File("qrCode.png"));
+                    ImageIO.write(image, "PNG", file);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
             }
         });
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-        generateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String hash = CreateQRCode.generateQRcode();
-                formattedTextField1.setValue(hash);
-                contentPane.setLayout(new FlowLayout());
-                JLabel label = new JLabel(hash);
-                //JLabel image = new JLabel(new ImageIcon("qrCode.png"));
-                //contentPane.add(image);
-                contentPane.updateUI();
-            }
-
-
+        buttonCancel.addActionListener(e -> onCancel());
+        generateButton.addActionListener(e -> {
+            String hash = CreateQRCode.generateQRCode();
+            formattedTextField1.setValue(hash);
+            contentPane.setLayout(new FlowLayout());
+            JLabel label = new JLabel(hash);
+            //JLabel image = new JLabel(new ImageIcon("qrCode.png"));
+            //contentPane.add(image);
+            contentPane.updateUI();
         });
 
         // call onCancel() when cross is clicked
@@ -96,11 +78,6 @@ public class QRGenerator extends JDialog {
         });
     }
 
-    private void onOK() {
-        // add your code here
-        dispose();
-    }
-
     private void onCancel() {
         // add your code here if necessary
         dispose();
@@ -110,15 +87,10 @@ public class QRGenerator extends JDialog {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+
         QRGenerator dialog = new QRGenerator();
         //dialog.setSize(475,150);
         dialog.pack();

@@ -4,141 +4,170 @@
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="style.css"/>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
     <title>Tests de l'api</title>
 </head>
 <body onload="initialize()">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="row">
-					<div class="col-lg-6">
-						<div id="map" style="width: 550px; height: 480px;"></div>
-						<div class="row">
-							<div class="col-lg-12">
-								<input id="address" type="text" value="Lyon" title="address">
-                                <input id="sectorsDist" type="text" value="200" title="sectorsDist">
-								<input type="button" value="Créer quadrillage" onclick="codeAddress()">
-								<input type="button" value="Afficher JSON" onclick="printJSON()">
-								<input type="button" value="Enregistrer JSON" onclick="download()">
-							</div>
-							<div class="col-lg-12">
-								<h3>Importer un fichier JSON (après quadrillage)</h3>
-								<input id="file" type="file" />
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-5">
-						<div class="row">
-							<div class="col-lg-6">
-								<h3>Création de zone</h3>
-								<form>
-									<p>
-										<label for="nameZone">Nom de la zone</label>
-										<input type="text" name="nameZone" id="nameZone">
-									</p>
-									<p>
-										<label for="descriptionZone">Description de la zone</label>
-										<input type="text" name="descriptionZone" id="descriptionZone">
-									</p>
-									<input type="button" id="createZoneButton" value="Créer zone" onclick="createZone()" class="btn btn-primary">
-								</form>
-							</div>
-							<div class="col-lg-6">
-								<h3>Ajout d'une balise</h3>
-								<form>
-									<p>
-										<label for="difficulty">Difficulté (1 à 5)</label>
-										<input type="range" name="difficulty" id="difficulty" min="1" max="5" required>
-									</p>
-									<p>
-										<label for="themeBeacon">Theme</label>
-										<select name="themeBeacon" id="themeBeacon">
-											<option value="SP" selected>Sport</option>
-											<option value="CUL">Culture</option>
-											<option value="BE">Bord de l'eau</option>
-											<option value="XX">Autre</option>
-										</select>
-									</p>
-									<p>
-										<label for="nameBeacon">Nom</label>
-										<input type="text" name="nameBeacon" id="nameBeacon" required>
-									</p>
-									<p>
-										<label for="descriptionBeacon">Description</label>
-										<input type="text" name="descriptionBeacon" id="descriptionBeacon" required>
-									</p>
-									<p>
-										<label for="descriptionMonument">Description du monument associé</label>
-										<input type="text" name="descriptionMonument" id="descriptionMonument" required>
-									</p>
-									<p>
-										<label for="hashToken">Hash du token</label>
-										<input type="text" name="hashToken" id="hashToken" required>
-									</p>
-									<input type="button" value="Créer la balise" onclick="createBeacon()">
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-1">
-						<p>Documentation:
-							<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalDocumentation">
-								<span class="glyphicon glyphicon-info-sign"></span>
-							</button>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-<div id="info"></div>
-<div id="cadre"></div>
+<div class="container-fluid">
 
-    <!-- Modal Documentation -->
-    <div id="modalDocumentation" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal Documentation Component -->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Aide à l'utilisation</h3>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        <h3>1. Quadrillage de la ville</h3>
-                        Mettre une ville (exemple: Lyon) dans le champs Ville => Mettre une distance correspondant à la longeur en mètre des secteurs pour le quadrillage
-                        =>Appuyer sur le button Créer quadrillage => Une carte centrée sur la ville souhaitée apparaît avec un quadrillage en secteur de celle-ci.
-                        <h3>1.Bis Importer des zones et balise via un fichier</h3>
-                        <strong>Requis: Avoir un quadrillage complet de la ville</strong><br/>
-                        Appuyer sur Choisir un fichier => Sélectionner un fichier contenant les zones et balise d'une ville déja quadriller
-                        => Appuyer sur Ouvrir => L'ensemble des zones et des balises associé au fichier sont affichés sur la carte.
-                        <h3>2. Création de Zone</h3>
-                        <strong>Requis: Avoir un quadrillage complet de la ville</strong> <br/>
-                        Cliquer sur un à plusieurs secteurs du quadrillage (re-cliquer pour déselectionner le ou les secteurs) => Les secteurs selectionnés deviennent rouge =>
-                        Dans la partie "Création de Zone", il faut mettre un nom de zone ainsi qu'une description => Appuyer sur le bouton Créer Zone => Votre zone est alors créée et les secteurs selectionnés deviennent bleu
-                        <h3>3. Ajout d'une balise</h3>
-                        <strong>Requis: Avoir un quadrillage complet et avoir créer une zone</strong><br/>
-                        Cliquer sur le secteur où l'on souhaite ajouter la balise (possibilité de desélectionné le secteur) => Définir une difficulté, un thème, un nom, une descrition de la balise, une description associé au monument,
-                        un hash du token du QRCode associé à la balise => Appuyer sur le boutton Créer la balise => La balise est alors ajoutée à la zone associé.
-                        <h3>4. Save JSON</h3>
-                        <strong>Requis: Avoir un quadrillage complet</strong><br/>
-                        Appuyer sur le boutton Enregistrer JSON => Un fichier appelé "map.json" devrait se télécharger. Ce fichier contient les caractéristiques de notre quadrillage,
-                        les zones créées avec leurs caractéristiques ainsi que les balises associés à chacune des zones.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                </div>
+    <div style="position: fixed; top: 0; right: 0; margin: 30px; z-index: 300;">
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalDocumentation">
+            ?
+        </button>
+    </div>
+    <div class="row" id="step1">
+        <div class="col-12">
+            <div class="jumbotron">
+                <h1 class="display-4">Bienvenue !</h1>
+                <p class="lead">Cette application web vous permettra de créer des zones et placer des balise compatible avec l'application 7isEnough.</p>
+                <hr class="my-4"/>
+                <a class="btn btn-primary btn-lg" href="#step2" role="button">Commencer !</a>
             </div>
         </div>
     </div>
+    <div class="row" id="step2">
+        <div class="col-8">
+            <div id="map" style="width: auto; height: 500px;"></div>
+        </div>
+        <div class="col-4">
+            <form>
+                <h3>Créer un quadrillage</h3>
+                <div class="form-group">
+                    <label for="address">Lieu</label>
+                    <input id="address" type="text" value="Lyon" class="form-control" title="address">
+                </div>
+                <div class="form-group">
+                    <label for="sectorsDist">Taille d'un secteur (m)</label>
+                    <input id="sectorsDist" type="text" value="200" class="form-control" title="sectorsDist">
+                </div>
+                <div class="form-row">
+                    <input type="button" value="Créer" class="btn btn-primary" onclick="codeAddress()">
+                </div>
+                <div  class="form-row">
+                    <input type="button" value="Enregistrer JSON" class="btn btn-secondary" onclick="download()">
+                    <input type="button" value="Afficher JSON" class="btn btn-light" onclick="printJSON()">
+                </div>
+            </form>
+            <form style="margin-top: 20px">
+                <h3>Charger un quadrillage</h3>
+                <div class="custom-file">
+                    <label for="file" class="custom-file-label">Fichier</label>
+                    <input id="file" type="file" class="custom-file-input" accept=".json"/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row" id="step3">
+        <div class="col-6">
+            <div class="row">
+                <form id="zoneForm">
+                    <h3>Création de zone</h3>
+                    <div class="form-row">
+                        <label for="nameZone">Nom de la zone</label>
+                        <input type="text" name="nameZone" id="nameZone" class="form-control" />
+                    </div>
+                    <div class="form-row">
+                        <label for="descriptionZone">Description de la zone</label>
+                        <textarea class="description form-control" id="descriptionZone" name="descriptionZone" form="zoneForm" required></textarea>
+                    </div>
+                    <input type="button" id="createZoneButton" value="Créer zone" onclick="createZone()" class="btn btn-primary">
+                </form>
+            </div>
+            <div class="row">
+
+                <div id="info"></div>
+                <h3>Informations d'une zone :</h3>
+                <div id="cadre"></div>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <form id="beaconForm">
+                <h3>Ajout d'une balise</h3>
+                <p>
+                    <label for="difficulty">Difficulté (1 à 5)</label>
+                <div id="difficultyValue"></div>
+                <input type="range" name="difficulty" id="difficulty" min="1" max="5" class="custom-range" required oninput="updateDifficulty(this.value)">
+                </p>
+                <p>
+                    <label for="themeBeacon">Theme</label>
+                    <select name="themeBeacon"  class="custom-select"  id="themeBeacon">
+                        <option value="SP" selected>Sport</option>
+                        <option value="CU">Culture</option>
+                        <option value="BE">Bord de l'eau</option>
+                        <option value="XX">Autre</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="nameBeacon">Nom</label>
+                    <input type="text"  class="form-control" name="nameBeacon" id="nameBeacon" required>
+                </p>
+                <p>
+                    <label for="descriptionBeacon">Description</label>
+                    <textarea class="description form-control" id="descriptionBeacon" name="descriptionBeacon" form="beaconForm" required></textarea>
+                </p>
+                <p>
+                    <label for="descriptionMonument">Description du monument associé</label>
+                    <textarea class="description form-control" id="descriptionMonument" name="descriptionMonument" form="beaconForm" required></textarea>
+                </p>
+                <p>
+                    <label for="hashToken">Hash du token</label>
+                    <input type="text"  class="form-control" name="hashToken" id="hashToken" required>
+                </p>
+                <input id="beaconButton" type="button" value="Créer la balise" class="btn btn-primary"  onclick="createBeacon()">
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Documentation -->
+<div id="modalDocumentation" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal Documentation Component -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Aide à l'utilisation</h3>
+            </div>
+            <div class="modal-body">
+                <p>
+                <h3>1. Quadrillage de la ville</h3>
+                Mettre une ville (exemple: Lyon) dans le champ Ville => Mettre une distance correspondant à la longeur en mètre des secteurs pour le quadrillage (200m recommandé)
+                =>Appuyer sur le bouton Créer quadrillage => Une carte centrée sur la ville souhaitée apparaît avec un quadrillage en secteurs de celle-ci.
+                <h3>1.Bis Importer des zones et balises via un fichier</h3>
+                <strong>Requis: Avoir un quadrillage complet de la ville</strong><br/>
+                Appuyer sur Choisir un fichier => Sélectionner un fichier contenant les zones et balises d'une ville déja quadrillée
+                => Appuyer sur Ouvrir => L'ensemble des zones et des balises associées au fichier sont affichées sur la carte.
+                <h3>2. Création de Zone</h3>
+                <strong>Requis: Avoir un quadrillage complet de la ville</strong> <br/>
+                Cliquer sur un ou plusieurs secteurs du quadrillage (re-cliquer pour déselectionner un secteur) => Les secteurs selectionnés deviennent verts =>
+                Dans la partie "Création de Zone", il faut mettre un nom de zone ainsi qu'une description => Appuyer sur le bouton Créer Zone => Votre zone est alors créée et les secteurs selectionnés deviennent bleu
+                <h3>3. Ajout d'une balise</h3>
+                <strong>Requis: Avoir un quadrillage complet et avoir créer une zone</strong><br/>
+                Cliquer sur le secteur où l'on souhaite ajouter la balise (la balise est créée dans le dernier secteur cliqué) => Définir une difficulté, un thème, un nom,
+                une descrition de la balise, une description associé au monument, un hash du token du QRCode associé à la balise => Appuyer sur le boutton Créer la balise
+                => La balise est alors ajoutée à la zone associée.
+                <h3>4. Enregistrer JSON</h3>
+                <strong>Requis: Avoir un quadrillage complet</strong><br/>
+                Appuyer sur le boutton Enregistrer JSON => Un fichier appelé "map.json" devrait se télécharger. Ce fichier contient les caractéristiques de notre quadrillage,
+                les zones créées avec leurs caractéristiques ainsi que les balises associées à chacune des zones.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6nZUZlt4bHabhU003YHL1rCpKNGKb974">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlslU0SdMBFc7jNvMO91qaBn0yv60Cm8A">
 </script>
 <script async defer>
 //		<input type="text" name="themeBeacon" id="themeBeacon" required>
@@ -220,6 +249,8 @@
 	let modifState = -1;
 
     function initialize() {
+        changeBeaconFormAccessibility(true);
+        document.getElementById('difficultyValue').innerHTML = document.getElementById('difficulty').value;
         geocoder = new google.maps.Geocoder();
         const latlng = new google.maps.LatLng(45.75, 4.85);
         const mapOptions = {
@@ -258,12 +289,12 @@
         }
     }
 
-    function lockSectorsInZone(i, j) {
+    function lockSectorsInZone(i, j, color) {
         let sectorX = Math.floor(jsonObject.zones[i].sectors[j]/jsonObject.sector.nbPerLine);
         let sectorY = jsonObject.zones[i].sectors[j] % jsonObject.sector.nbPerLine;
 
         sectors[sectorX][sectorY].setOptions({
-            fillColor: '#0000FF'
+            fillColor: color //'#0000FF'
         });
         sectors[sectorX][sectorY].selected = 2;
     }
@@ -278,8 +309,9 @@
             jsonObject = JSON.parse(jsonToParse);
 
             for(let i = 0; i < jsonObject.zones.length; i++) {
+                let color = randomColor({hue: 'blue'});
                 for (let j = 0; j < jsonObject.zones[i].sectors.length; j++) {
-                    lockSectorsInZone(i, j);
+                    lockSectorsInZone(i, j, color);
                 }
                 for (let j = 0; j < jsonObject.zones[i].beacons.length; j++) {
                     if (jsonObject.zones[i].beacons[j].id > beaconNumber) {
@@ -325,9 +357,10 @@
 		document.getElementById('nameZone').value = "";
 		document.getElementById('descriptionZone').value = "";
 
+		let color = randomColor({hue: 'blue'});
         for(let i = 0; i < jsonObject.zones[index].sectors.length; i++)
         {
-            lockSectorsInZone(index, i);
+            lockSectorsInZone(index, i, color);
         }
 
         if (modifState > -1)
@@ -340,6 +373,11 @@
         }
         document.getElementById('createZoneButton').value = "Créer zone";
 
+    }
+
+    function updateDifficulty(newVal)
+    {
+        document.getElementById('difficultyValue').innerHTML = newVal;
     }
 
 	function createBeacon(){
@@ -380,6 +418,30 @@
         document.getElementById('hashToken').value = "";
 	}
 
+	function findZoneBySectorId(sectorId)
+    {
+        let index = -1;
+        for (let i=0 ; i<jsonObject.zones.length; i++)
+        {
+            if(jsonObject.zones[i].sectors.includes(sectorId))
+            {
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    function changeBeaconFormAccessibility(disable)
+	{
+		document.getElementById('difficulty').disabled = disable;
+		document.getElementById('themeBeacon').disabled = disable;
+		document.getElementById('nameBeacon').disabled = disable;
+		document.getElementById('descriptionBeacon').disabled = disable;
+		document.getElementById('descriptionMonument').disabled = disable;
+		document.getElementById('hashToken').disabled = disable;
+		document.getElementById('beaconButton').disabled = disable;
+	}
     function codeAddress() {
 
         for (const x of sectors) {
@@ -471,6 +533,7 @@
                         let doubleClicked = lastSectorClicked === this;
                         lastSectorClicked = this;
                         if (this.selected === 0){
+                            changeBeaconFormAccessibility(true);
 							this.setOptions({
 								fillColor: '#00FF00'
 							});
@@ -480,6 +543,7 @@
 							this.selected = 1;
                         }
 						else if (this.selected === 1){
+                            changeBeaconFormAccessibility(true);
 							this.setOptions({
 								fillColor: '#FF0000'
 							});
@@ -490,34 +554,57 @@
                             }
 							this.selected = 0;
 						}
-						else if (this.selected === 2 && pointClick.length === 0 && doubleClicked)
+						else if (this.selected === 2)
                         {
-                            document.getElementById('createZoneButton').value = "Modifier zone";
-                            let zoneIndex = -1;
-                            for (let k = 0 ; k < jsonObject.zones.length ; k++)
+                            changeBeaconFormAccessibility(false);
+                            document.getElementById('cadre').innerHTML = "";
+                            let zoneIndex = findZoneBySectorId(lastSectorClicked.id);
+
+                            if (zoneIndex > -1)
                             {
-                                if (jsonObject.zones[k].sectors.includes(lastSectorClicked.id))
+                                document.getElementById('cadre').innerHTML += "Nome de la zone : " + jsonObject.zones[zoneIndex].name + '</br>';
+                                document.getElementById('cadre').innerHTML += "Description de la zone : " + jsonObject.zones[zoneIndex].description + '</br>';
+                                document.getElementById('cadre').innerHTML += "Secteurs composant la zone : ";
+
+                                for (let k=0; k < jsonObject.zones[zoneIndex].sectors.length ; k++)
                                 {
-                                    zoneIndex = k;
+                                    document.getElementById('cadre').innerHTML += jsonObject.zones[zoneIndex].sectors[k] + " ";
+                                }
+
+                                document.getElementById('cadre').innerHTML += '</br>';
+                                document.getElementById('cadre').innerHTML += "Liste des " + jsonObject.zones[zoneIndex].beacons.length + " balises de la zone : " + '<ul>';
+
+                                for (let k=0 ; k < jsonObject.zones[zoneIndex].beacons.length ; k++)
+                                {
+                                    document.getElementById('cadre').innerHTML += "<li>Balise n°" + jsonObject.zones[zoneIndex].beacons[k].id + " : " + jsonObject.zones[zoneIndex].beacons[k].name + "</li>";
+                                }
+                                document.getElementById('cadre').innerHTML += '</ul>';
+
+                                if (pointClick.length === 0 && doubleClicked)
+                                {
+                                    document.getElementById('createZoneButton').value = "Modifier zone";
+                                    let zoneIndex = findZoneBySectorId(lastSectorClicked.id);
+
+                                    document.getElementById('nameZone').value = jsonObject.zones[zoneIndex].name;
+                                    document.getElementById('descriptionZone').value = jsonObject.zones[zoneIndex].description;
+
+                                    for (let l = 0 ; l < jsonObject.zones[zoneIndex].sectors.length ; l++)
+                                    {
+                                        let sectorX = Math.floor(jsonObject.zones[zoneIndex].sectors[l]/jsonObject.sector.nbPerLine);
+                                        let sectorY = jsonObject.zones[zoneIndex].sectors[l] % jsonObject.sector.nbPerLine;
+
+                                        sectors[sectorX][sectorY].setOptions({
+                                            fillColor: '#00FF00'
+                                        });
+                                        sectors[sectorX][sectorY].selected = 1;
+
+                                        pointClick.push(sectors[sectorX][sectorY]);
+                                    }
+                                    modifState = zoneIndex;
+                                    return alert("ATTENTION : Supprimer un ou plusieurs secteurs de la zone n'entraînera pas la suppression des balises existantes sur ce(s) secteur(s) de la zone en question !");
                                 }
                             }
-                            document.getElementById('nameZone').value = jsonObject.zones[zoneIndex].name;
-                            document.getElementById('descriptionZone').value = jsonObject.zones[zoneIndex].description;
 
-                            for (let l = 0 ; l < jsonObject.zones[zoneIndex].sectors.length ; l++)
-                            {
-                                let sectorX = Math.floor(jsonObject.zones[zoneIndex].sectors[l]/jsonObject.sector.nbPerLine);
-                                let sectorY = jsonObject.zones[zoneIndex].sectors[l] % jsonObject.sector.nbPerLine;
-
-                                sectors[sectorX][sectorY].setOptions({
-                                    fillColor: '#00FF00'
-                                });
-                                sectors[sectorX][sectorY].selected = 1;
-
-                                pointClick.push(sectors[sectorX][sectorY]);
-                            }
-                            modifState = zoneIndex;
-                            return alert("ATTENTION : Supprimer un ou plusieurs secteurs de la zone n'entraînera pas la suppression des balises existantes sur ce(s) secteur(s) de la zone en question !");
                         }
 
 					});
