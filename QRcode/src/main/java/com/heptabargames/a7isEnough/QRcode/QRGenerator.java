@@ -88,9 +88,10 @@ public class QRGenerator extends JDialog {
             public void mouseClicked(MouseEvent e) {
                 String hashCopy = formattedTextField1.getValue().toString();
                 StringSelection selection = new StringSelection(hashCopy);
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                System.out.println("Test");
-                clipboard.setContents(selection, selection);
+                //Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                //clipboard.setContents(selection, selection);
+                //PopupFactory popupFactory = new PopupFactory();
+                //popupFactory.getPopup(null, formattedTextField1, 100, 100);
             }
         });
     }
